@@ -2,22 +2,23 @@ package com.example.activitymonitor.report.application.iterator;
 
 import com.example.activitymonitor.report.domain.Report;
 
-import java.util.Iterator;
 import java.util.List;
 
-public class DataPointCountIterator implements Iterator<Report> {
-    private List<Report> reports;
+public class DataPointCountIterator {
+    private final List<Report> reports;
     private int position;
+    private final int minDataPointCount;
 
-    public DataPointCountIterator(List<Report> reports) {
+    public DataPointCountIterator(List<Report> reports, int minDataPointCount) {
         this.reports = reports;
         this.position = 0;
+        this.minDataPointCount = minDataPointCount;
     }
 
-    @Override
     public boolean hasNext() {
         while (position < reports.size()) {
-            if (reports.get(position) != null) {
+            Report currentReport = reports.get(position);
+            if (currentReport.getData().size() > minDataPointCount) {
                 return true;
             }
             position++;
@@ -25,8 +26,10 @@ public class DataPointCountIterator implements Iterator<Report> {
         return false;
     }
 
-    @Override
-    public Report next() {
+    public Report getNext() {
+        if (!hasNext()) {
+            return null;
+        }
         return reports.get(position++);
     }
 }

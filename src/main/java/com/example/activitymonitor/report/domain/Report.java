@@ -1,10 +1,15 @@
 package com.example.activitymonitor.report.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public abstract class Report {
 
     protected String title;
