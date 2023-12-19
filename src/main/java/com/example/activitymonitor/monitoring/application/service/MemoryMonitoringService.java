@@ -1,9 +1,9 @@
-package com.example.activitymonitor.monitoring.subdomain.windows.service;
+package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.Visitor;
 
-public class WindowsMonitoringService implements Monitoring {
+public class MemoryMonitoringService implements Monitoring {
 
     @Override
     public void accept(Visitor visitor) {
@@ -11,7 +11,7 @@ public class WindowsMonitoringService implements Monitoring {
     }
 
     @Override
-    public void startMonitoring() {
-
+    public void startMonitoring(boolean isMonitoringStarted) {
+        //TODO start monitoring
     }
 }
