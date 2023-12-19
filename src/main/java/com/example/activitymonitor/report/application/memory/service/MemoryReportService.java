@@ -1,7 +1,7 @@
-package com.example.activitymonitor.report.subdomain.memory.service;
+package com.example.activitymonitor.report.application.memory.service;
 
 import com.example.activitymonitor.report.application.AbstractReportFactory;
-import com.example.activitymonitor.report.subdomain.memory.model.MemoryReport;
+import com.example.activitymonitor.report.application.memory.model.MemoryReport;
 
 public class MemoryReportService implements AbstractReportFactory {
 

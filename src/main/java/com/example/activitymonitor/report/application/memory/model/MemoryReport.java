@@ -1,4 +1,4 @@
-package com.example.activitymonitor.report.subdomain.memory.model;
+package com.example.activitymonitor.report.application.memory.model;
 
 import com.example.activitymonitor.report.domain.Report;
 

@@ -1,7 +1,7 @@
-package com.example.activitymonitor.report.subdomain.keylogger.service;
+package com.example.activitymonitor.report.application.keylogger.service;
 
 import com.example.activitymonitor.report.application.AbstractReportFactory;
-import com.example.activitymonitor.report.subdomain.keylogger.model.KeyLoggerReport;
+import com.example.activitymonitor.report.application.keylogger.model.KeyLoggerReport;
 
 public class KeyLoggerService implements AbstractReportFactory {
     @Override

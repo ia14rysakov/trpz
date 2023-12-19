@@ -1,4 +1,4 @@
-package com.example.activitymonitor.report.subdomain.mousetracker.model;
+package com.example.activitymonitor.report.application.mousetracker.model;
 
 import com.example.activitymonitor.report.domain.Report;
 

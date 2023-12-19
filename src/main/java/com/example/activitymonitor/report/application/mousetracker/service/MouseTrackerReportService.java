@@ -1,7 +1,7 @@
-package com.example.activitymonitor.report.subdomain.mousetracker.service;
+package com.example.activitymonitor.report.application.mousetracker.service;
 
 import com.example.activitymonitor.report.application.AbstractReportFactory;
-import com.example.activitymonitor.report.subdomain.mousetracker.model.MouseTrackerReport;
+import com.example.activitymonitor.report.application.mousetracker.model.MouseTrackerReport;
 
 public class MouseTrackerReportService implements AbstractReportFactory {
 

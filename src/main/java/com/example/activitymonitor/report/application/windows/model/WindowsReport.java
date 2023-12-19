@@ -1,4 +1,4 @@
-package com.example.activitymonitor.report.subdomain.windows.model;
+package com.example.activitymonitor.report.application.windows.model;
 
 import com.example.activitymonitor.report.domain.Report;
 

@@ -1,7 +1,7 @@
-package com.example.activitymonitor.report.subdomain.windows.service;
+package com.example.activitymonitor.report.application.windows.service;
 
 import com.example.activitymonitor.report.application.AbstractReportFactory;
-import com.example.activitymonitor.report.subdomain.windows.model.WindowsReport;
+import com.example.activitymonitor.report.application.windows.model.WindowsReport;
 
 public class WindowsReportService implements AbstractReportFactory {
 

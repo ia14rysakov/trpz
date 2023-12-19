@@ -1,4 +1,4 @@
-package com.example.activitymonitor.report.subdomain.keylogger.model;
+package com.example.activitymonitor.report.application.keylogger.model;
 
 import com.example.activitymonitor.report.domain.Report;
 

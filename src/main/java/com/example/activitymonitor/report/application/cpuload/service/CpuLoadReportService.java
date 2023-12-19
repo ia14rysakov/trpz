@@ -1,7 +1,7 @@
-package com.example.activitymonitor.report.subdomain.cpuload.service;
+package com.example.activitymonitor.report.application.cpuload.service;
 
 import com.example.activitymonitor.report.application.AbstractReportFactory;
-import com.example.activitymonitor.report.subdomain.cpuload.model.CpuLoadReport;
+import com.example.activitymonitor.report.application.cpuload.model.CpuLoadReport;
 
 public class CpuLoadReportService implements AbstractReportFactory {
 
