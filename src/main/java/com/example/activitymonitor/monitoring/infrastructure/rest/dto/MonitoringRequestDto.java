@@ -8,11 +8,14 @@ import lombok.Setter;
 public class MonitoringRequestDto {
 
     private String monitoringType;
-    private String osType;
+    private String osType = "Windows";
 
     public MonitoringRequestDto(String monitoringType, String osType) {
         this.monitoringType = monitoringType;
         this.osType = osType;
+    }
+    public MonitoringRequestDto(String monitoringType) {
+        this.monitoringType = monitoringType;
     }
 }
 

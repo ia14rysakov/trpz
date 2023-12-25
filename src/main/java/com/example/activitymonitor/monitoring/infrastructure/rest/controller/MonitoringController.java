@@ -5,10 +5,7 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.infrastructure.rest.dto.MonitoringRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -30,6 +27,17 @@ public class MonitoringController {
 
     @PostMapping("/start")
     public Flux<MonitoringPoint> startMonitoring(@RequestBody MonitoringRequestDto monitoringRequestDto) {
+        String monitoringType = monitoringRequestDto.getMonitoringType();
+        String osType = monitoringRequestDto.getOsType();
+
+        AbstractMonitor abstractMonitor = monitorMap.get(osType);
+
+        return Flux.fromStream(abstractMonitor.startMonitoring(monitoringType));
+    }
+
+    @GetMapping("/test")
+    public Flux<MonitoringPoint> test() {
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("test", "Windows");
         String monitoringType = monitoringRequestDto.getMonitoringType();
         String osType = monitoringRequestDto.getOsType();
 

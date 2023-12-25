@@ -7,7 +7,7 @@ import java.time.Duration;
 
 public class MemoryReport extends Report {
 
-    public MemoryReport(String title, Duration duration, ReportType reportType) {
+    public MemoryReport(String title, Duration duration, String reportType) {
         super(title, duration, reportType);
     }
 }
