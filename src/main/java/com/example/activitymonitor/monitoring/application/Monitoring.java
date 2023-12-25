@@ -1,20 +1,11 @@
 package com.example.activitymonitor.monitoring.application;
 
+import com.example.activitymonitor.monitoring.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 
-import java.time.LocalDateTime;
-
 public interface Monitoring {
-    void accept(Visitor visitor);
+    Report accept(ReportVisitor reportVisitor);
 
     void startMonitoring(boolean isMonitoringStarted);
-
-    Report generateReportByTime(LocalDateTime end);
-
-    Report generateScheduledReport(LocalDateTime start, LocalDateTime end);
-
-    Report startReporting();
-
-    Report stopReporting();
 }
 
