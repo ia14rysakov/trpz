@@ -28,10 +28,10 @@ public abstract class AbstractMonitor {
 
     public Stream<MonitoringPoint> startMonitoring(String monitoringType) {
         return switch (monitoringType) {
-            case "cpuLoad" -> setCpuLoadMonitor().startMonitoring(true);
-            case "keyLogger" -> setKeyLoggerMonitor().startMonitoring(true);
-            case "memory" -> setMemoryMonitor().startMonitoring(true);
-            case "mouseTracker" -> setMouseTrackerMonitor().startMonitoring(true);
+            case "cpuLoad" -> setCpuLoadMonitor().startMonitoring(true); //TODO need fix
+            case "keyLogger" -> setKeyLoggerMonitor().startMonitoring(true); //TODO need fix
+            case "memory" -> setMemoryMonitor().startMonitoring(true);  //TODO need check
+            case "mouseTracker" -> setMouseTrackerMonitor().startMonitoring(true); //TODO need fix
             case "windows" -> setWindowsMonitor().startMonitoring(true);
             case "test" -> setTestMonitor().startMonitoring(true);
             default -> throw new IllegalArgumentException("Invalid monitoring type: " + monitoringType);
