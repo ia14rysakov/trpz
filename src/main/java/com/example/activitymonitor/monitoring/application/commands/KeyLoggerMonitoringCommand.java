@@ -6,18 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class KeyLoggerMonitoringCommand implements StartMonitoringCommand {
-
-    private KeyLoggerMonitoringService keyLoggerMonitoringService;
-    private boolean isMonitoringStarted;
+public class KeyLoggerMonitoringCommand extends StartMonitoringCommand {
 
     public KeyLoggerMonitoringCommand(KeyLoggerMonitoringService keyLoggerMonitoringService, boolean isMonitoringStarted) {
-        this.keyLoggerMonitoringService = keyLoggerMonitoringService;
-        this.isMonitoringStarted = isMonitoringStarted;
+        super(keyLoggerMonitoringService, isMonitoringStarted);
     }
     @Override
     public void execute() {
-        keyLoggerMonitoringService.startMonitoring(isMonitoringStarted);
+        monitoring.startMonitoring(isMonitoringStarted);
     }
 }
 

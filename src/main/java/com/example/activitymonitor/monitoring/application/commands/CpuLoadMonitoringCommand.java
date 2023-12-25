@@ -6,19 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CpuLoadMonitoringCommand implements StartMonitoringCommand {
-
-    private CpuLoadMonitoringService cpuLoadMonitoringService;
-
-    private boolean isMonitoringStarted;
+public class CpuLoadMonitoringCommand extends StartMonitoringCommand {
 
     public CpuLoadMonitoringCommand(CpuLoadMonitoringService cpuLoadMonitoringService, boolean isMonitoringStarted) {
-        this.cpuLoadMonitoringService = cpuLoadMonitoringService;
-        this.isMonitoringStarted = isMonitoringStarted;
+        super(cpuLoadMonitoringService, isMonitoringStarted);
     }
     @Override
     public void execute() {
-        cpuLoadMonitoringService.startMonitoring(isMonitoringStarted);
+        monitoring.startMonitoring(isMonitoringStarted);
     }
 }
 

@@ -6,19 +6,15 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class WindowsMonitoringCommand implements StartMonitoringCommand {
-
-    private WindowsMonitoringService windowsMonitoringService;
-    private boolean isMonitoringStarted;
+public class WindowsMonitoringCommand extends StartMonitoringCommand {
 
     public WindowsMonitoringCommand(WindowsMonitoringService windowsMonitoringService, boolean isMonitoringStarted) {
-        this.windowsMonitoringService = windowsMonitoringService;
-        this.isMonitoringStarted = isMonitoringStarted;
+        super(windowsMonitoringService, isMonitoringStarted);
     }
 
     @Override
     public void execute() {
-        windowsMonitoringService.startMonitoring(isMonitoringStarted);
+        monitoring.startMonitoring(isMonitoringStarted);
     }
 }
 

@@ -6,19 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MouseTrackerMonitoringCommand implements StartMonitoringCommand {
-
-    private MouseTrackerMonitoringService mouseTrackerMonitoringService;
-    private boolean isMonitoringStarted;
-
+public class MouseTrackerMonitoringCommand extends StartMonitoringCommand {
     public MouseTrackerMonitoringCommand(MouseTrackerMonitoringService mouseTrackerMonitoringService, boolean isMonitoringStarted) {
-        this.mouseTrackerMonitoringService = mouseTrackerMonitoringService;
-        this.isMonitoringStarted = isMonitoringStarted;
+        super(mouseTrackerMonitoringService, isMonitoringStarted);
     }
 
     @Override
     public void execute() {
-        mouseTrackerMonitoringService.startMonitoring(isMonitoringStarted);
+        monitoring.startMonitoring(isMonitoringStarted);
     }
 }
 

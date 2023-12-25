@@ -1,7 +1,9 @@
 package com.example.activitymonitor.monitoring.domain.points;
 
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import lombok.Getter;
 
+@Getter
 public class MemoryMonitoringPoint implements MonitoringPoint {
     private double memoryUsage;
 
@@ -9,7 +11,4 @@ public class MemoryMonitoringPoint implements MonitoringPoint {
         this.memoryUsage = memoryUsage;
     }
 
-    public double getMemoryUsage() {
-        return memoryUsage;
-    }
 }

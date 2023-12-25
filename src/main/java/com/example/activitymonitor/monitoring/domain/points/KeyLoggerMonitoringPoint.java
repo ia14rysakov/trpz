@@ -1,7 +1,9 @@
 package com.example.activitymonitor.monitoring.domain.points;
 
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import lombok.Getter;
 
+@Getter
 public class KeyLoggerMonitoringPoint implements MonitoringPoint {
     private String lastKeyPressed;
 
@@ -9,7 +11,4 @@ public class KeyLoggerMonitoringPoint implements MonitoringPoint {
         this.lastKeyPressed = lastKeyPressed;
     }
 
-    public String getLastKeyPressed() {
-        return lastKeyPressed;
-    }
 }

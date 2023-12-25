@@ -1,9 +1,12 @@
 package com.example.activitymonitor.monitoring.application.abstractfactory;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
+import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -21,26 +24,18 @@ public abstract class AbstractMonitor {
 
     abstract public Monitoring setWindowsMonitor();
 
-    public void startMonitoring(String monitoringType) {
-        switch (monitoringType) {
-            case "cpuLoad":
-                setCpuLoadMonitor().startMonitoring(true);
-                break;
-            case "keyLogger":
-                setKeyLoggerMonitor().startMonitoring(true);
-                break;
-            case "memory":
-                setMemoryMonitor().startMonitoring(true);
-                break;
-            case "mouseTracker":
-                setMouseTrackerMonitor().startMonitoring(true);
-                break;
-            case "windows":
-                setWindowsMonitor().startMonitoring(true);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid monitoring type: " + monitoringType);
-        }
+    abstract public Monitoring setTestMonitor();
+
+    public Stream<MonitoringPoint> startMonitoring(String monitoringType) {
+        return switch (monitoringType) {
+            case "cpuLoad" -> setCpuLoadMonitor().startMonitoring(true);
+            case "keyLogger" -> setKeyLoggerMonitor().startMonitoring(true);
+            case "memory" -> setMemoryMonitor().startMonitoring(true);
+            case "mouseTracker" -> setMouseTrackerMonitor().startMonitoring(true);
+            case "windows" -> setWindowsMonitor().startMonitoring(true);
+            case "test" -> setTestMonitor().startMonitoring(true);
+            default -> throw new IllegalArgumentException("Invalid monitoring type: " + monitoringType);
+        };
     }
 
     public Monitoring getConcreteMonitoring(ReportRequestDto report) {

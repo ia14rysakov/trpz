@@ -6,19 +6,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemoryMonitoringCommand implements StartMonitoringCommand {
+public class MemoryMonitoringCommand extends StartMonitoringCommand {
 
-        private MemoryMonitoringService memoryMonitoringService;
-        private boolean isMonitoringStarted;
+    public MemoryMonitoringCommand(MemoryMonitoringService memoryMonitoringService, boolean isMonitoringStarted) {
+        super(memoryMonitoringService, isMonitoringStarted);
+    }
 
-        public MemoryMonitoringCommand(MemoryMonitoringService memoryMonitoringService, boolean isMonitoringStarted) {
-            this.memoryMonitoringService = memoryMonitoringService;
-            this.isMonitoringStarted = isMonitoringStarted;
-        }
-
-        @Override
-        public void execute() {
-            memoryMonitoringService.startMonitoring(isMonitoringStarted);
-        }
+    @Override
+    public void execute() {
+        monitoring.startMonitoring(isMonitoringStarted);
+    }
 }
 
