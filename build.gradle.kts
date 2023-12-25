@@ -23,8 +23,8 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
-//    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.data:spring-data-mongodb:4.2.0")
 
     implementation("net.java.dev.jna:jna-platform:5.14.0")
     implementation("io.projectreactor:reactor-core:3.6.0")

@@ -1,10 +1,18 @@
 package com.example.activitymonitor.report.application.visitor;
 
+import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.service.*;
+import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,26 +28,50 @@ public class ReportStartStopGenerator implements ReportVisitor {
 
     @Override
     public Report visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
-        return null;
+        return defaultVisiting(cpuLoadMonitoringService, "CPU Load Monitoring");
     }
 
     @Override
     public Report visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
-        return null;
+        return defaultVisiting(keyLoggerMonitoringService, "Key Logger Monitoring");
     }
 
     @Override
     public Report visit(MemoryMonitoringService memoryMonitoringService) {
-        return null;
+        return defaultVisiting(memoryMonitoringService, "Memory Monitoring");
     }
 
     @Override
     public Report visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
-        return null;
+        return defaultVisiting(mouseTrackerMonitoringService, "Mouse Tracker Monitoring");
     }
 
     @Override
     public Report visit(WindowsMonitoringService windowsMonitoringService) {
-        return null;
+        return defaultVisiting(windowsMonitoringService, "Windows Monitoring");
+    }
+
+    private Report defaultVisiting(Monitoring monitoring, String serviceName) {
+        LocalDateTime startTime = LocalDateTime.now();
+
+        List<MonitoringPoint> data = new ArrayList<>();
+        try {
+            Iterator<MonitoringPoint> iterator = monitoring.startMonitoring(true).iterator();
+            while (isMonitoringStarted && iterator.hasNext()) {
+                data.add(iterator.next());
+            }
+        } catch (Exception e) {
+            //TODO log exception
+        }
+
+        LocalDateTime endTime = LocalDateTime.now();
+        Duration duration = Duration.between(startTime, endTime);
+
+        String title = serviceName + " Report - from " + startTime + " to " + endTime;
+
+        Report report = new Report(title, duration, getReportName());
+        report.setData(data);
+
+        return report;
     }
 }

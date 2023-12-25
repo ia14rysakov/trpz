@@ -7,6 +7,7 @@ import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestD
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RestController("/report")
+@RestController
+@RequestMapping("/report")
 public class ReportController {
 
     private Map<String, ReportVisitor> reportVisitorMap;
@@ -41,8 +43,8 @@ public class ReportController {
 
         ReportVisitor reportVisitor = reportVisitorMap.get(reportType);
 
-        currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor);
+        Report report = currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(report);
     }
 }
