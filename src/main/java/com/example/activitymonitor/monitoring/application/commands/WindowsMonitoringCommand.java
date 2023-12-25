@@ -1,6 +1,5 @@
 package com.example.activitymonitor.monitoring.application.commands;
 
-import com.example.activitymonitor.monitoring.application.output.StartMonitoringCommand;
 import com.example.activitymonitor.monitoring.application.service.WindowsMonitoringService;
 import lombok.Getter;
 import lombok.Setter;
