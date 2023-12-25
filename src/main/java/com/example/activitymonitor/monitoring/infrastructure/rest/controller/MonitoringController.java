@@ -32,7 +32,7 @@ public class MonitoringController {
 
         AbstractMonitor abstractMonitor = monitorMap.get(osType);
 
-        return Flux.fromStream(abstractMonitor.startMonitoring(monitoringType));
+        return abstractMonitor.startMonitoring(monitoringType);
     }
 
     @GetMapping("/test")
@@ -43,6 +43,6 @@ public class MonitoringController {
 
         AbstractMonitor abstractMonitor = monitorMap.get(osType);
 
-        return Flux.fromStream(abstractMonitor.startMonitoring(monitoringType));
+        return abstractMonitor.startMonitoring(monitoringType);
     }
 }

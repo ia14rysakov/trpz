@@ -5,6 +5,7 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import lombok.Getter;
 import lombok.Setter;
+import reactor.core.publisher.Flux;
 
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public abstract class AbstractMonitor {
 
     abstract public Monitoring setTestMonitor();
 
-    public Stream<MonitoringPoint> startMonitoring(String monitoringType) {
+    public Flux<MonitoringPoint> startMonitoring(String monitoringType) {
         return switch (monitoringType) {
             case "cpuLoad" -> setCpuLoadMonitor().startMonitoring(true); //TODO need fix
             case "keyLogger" -> setKeyLoggerMonitor().startMonitoring(true); //TODO need fix
