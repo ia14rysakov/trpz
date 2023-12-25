@@ -7,6 +7,7 @@ import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -60,9 +61,10 @@ public class ReportByTimeGenerator implements ReportVisitor {
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, dueToTime);
 
-        List<MonitoringPoint> data = monitoringService.startMonitoring(true)
-                .takeWhile(point -> LocalDateTime.now().isBefore(dueToTime))
-                .collect(Collectors.toList());
+        Flux<MonitoringPoint> dataFlux = monitoringService.startMonitoring(true)
+                .takeWhile(point -> LocalDateTime.now().isBefore(dueToTime));
+
+        List<MonitoringPoint> data = dataFlux.collectList().block();
 
         String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
 

@@ -65,7 +65,7 @@ public class ScheduledReportGenerator implements ReportVisitor {
         Duration delay = Duration.between(LocalDateTime.now(), start);
         Mono<Long> delayMono = Mono.delay(delay);
 
-        Flux<MonitoringPoint> dataFlux = Flux.fromStream(monitoring.startMonitoring(true))
+        Flux<MonitoringPoint> dataFlux = monitoring.startMonitoring(true)
                 .takeWhile(point -> LocalDateTime.now().isBefore(end));
 
         List<MonitoringPoint> data = delayMono.thenMany(dataFlux).collectList().block();

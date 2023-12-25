@@ -55,14 +55,12 @@ public class ReportStartStopGenerator implements ReportVisitor {
         LocalDateTime startTime = LocalDateTime.now();
 
         List<MonitoringPoint> data = new ArrayList<>();
-        try {
-            Iterator<MonitoringPoint> iterator = monitoring.startMonitoring(true).iterator();
-            while (isMonitoringStarted && iterator.hasNext()) {
-                data.add(iterator.next());
-            }
-        } catch (Exception e) {
-            //TODO log exception
-        }
+        monitoring.startMonitoring(true)
+                .takeWhile(point -> isMonitoringStarted)
+                .doOnError(e -> {
+                    //TODO log exception
+                })
+                .subscribe(data::add);
 
         LocalDateTime endTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, endTime);
