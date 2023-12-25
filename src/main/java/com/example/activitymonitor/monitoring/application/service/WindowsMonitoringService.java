@@ -10,9 +10,11 @@ import com.example.activitymonitor.report.domain.Report;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
+import reactor.core.publisher.Flux;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,10 +33,10 @@ public class WindowsMonitoringService implements Monitoring {
     }
 
     @Override
-    public Stream<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
-        return Stream.generate(() -> {
-            List<WindowsPoint> windowsMonitoringPoints = new ArrayList<>();
+    public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
+        return Flux.generate(sink -> {
             if (isMonitoringStarted) {
+                List<WindowsPoint> windowsMonitoringPoints = new ArrayList<>();
                 User32.INSTANCE.EnumWindows((hWnd, arg) -> {
                     char[] windowText = new char[512];
                     User32.INSTANCE.GetWindowText(hWnd, windowText, 512);
@@ -53,15 +55,11 @@ public class WindowsMonitoringService implements Monitoring {
                     windowsMonitoringPoints.add(new WindowsPoint(wText, windowSize, cpuUsage, memoryUsage));
                     return true;
                 }, null);
-
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                sink.next(new WindowsMonitoringPoint(windowsMonitoringPoints));
+            } else {
+                sink.complete();
             }
-            return new WindowsMonitoringPoint(windowsMonitoringPoints);
-        });
+        }).delayElements(Duration.ofSeconds(1)).cast(MonitoringPoint.class);
     }
 }
 

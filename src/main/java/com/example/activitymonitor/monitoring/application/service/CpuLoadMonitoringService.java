@@ -7,7 +7,9 @@ import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -25,21 +27,17 @@ public class CpuLoadMonitoringService implements Monitoring {
 
 
     @Override
-    public Stream<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
+    public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         SystemInfo si = new SystemInfo();
         CentralProcessor processor = si.getHardware().getProcessor();
-        return Stream.generate(() -> {
-            while (isMonitoringStarted) {
+        return Flux.generate(sink -> {
+            if (isMonitoringStarted) {
                 double cpuLoad = processor.getSystemCpuLoad(1000) * 100;
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                return new CPUMonitoringPoint(cpuLoad);
+                sink.next(new CPUMonitoringPoint(cpuLoad));
+            } else {
+                sink.complete();
             }
-            return null;
-        });
+        }).delayElements(Duration.ofSeconds(1)).cast(MonitoringPoint.class);
     }
 }
 
