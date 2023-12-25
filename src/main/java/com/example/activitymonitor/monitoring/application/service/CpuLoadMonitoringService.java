@@ -8,7 +8,6 @@ import com.example.activitymonitor.report.domain.Report;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 
-import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
