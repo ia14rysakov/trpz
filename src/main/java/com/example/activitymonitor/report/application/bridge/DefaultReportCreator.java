@@ -1,15 +1,21 @@
-package com.example.activitymonitor.report.application;
+package com.example.activitymonitor.report.application.bridge;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
+import com.example.activitymonitor.report.application.visitor.ReportByTimeGenerator;
+import com.example.activitymonitor.report.application.visitor.ReportStartStopGenerator;
+import com.example.activitymonitor.report.application.visitor.ScheduledReportGenerator;
 import com.example.activitymonitor.report.domain.Report;
 
 import java.time.LocalDateTime;
 
-public class ReportWithEmail implements ReportCreator {
-    public Monitoring monitoring;
-    public String email;
+/**
+ * Deprecated due to useless in course work
+ */
 
-    public ReportWithEmail(Monitoring monitoring) {
+public class DefaultReportCreator implements ReportCreator {
+    public Monitoring monitoring;
+
+    public DefaultReportCreator(Monitoring monitoring) {
         this.monitoring = monitoring;
     }
 
@@ -31,6 +37,7 @@ public class ReportWithEmail implements ReportCreator {
     @Override
     public Report stopReporting() {
         return null;
+
     }
 }
 

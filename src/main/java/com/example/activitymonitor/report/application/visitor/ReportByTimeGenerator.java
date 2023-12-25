@@ -1,18 +1,23 @@
-package com.example.activitymonitor.monitoring.application.visitor;
+package com.example.activitymonitor.report.application.visitor;
 
 import com.example.activitymonitor.monitoring.application.service.*;
 import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-@Setter
+import java.time.LocalDateTime;
+
 @Getter
-public class ReportStartStopGenerator implements ReportVisitor {
+@Setter
+@Component
+public class ReportByTimeGenerator implements ReportVisitor {
 
-    private boolean isMonitoringStarted;
+    private LocalDateTime dueToTime = null;
 
-    public ReportStartStopGenerator(boolean isMonitoringStarted) {
-        this.isMonitoringStarted = isMonitoringStarted;
+    @Override
+    public String getReportName() {
+        return "ReportByTime";
     }
 
     @Override

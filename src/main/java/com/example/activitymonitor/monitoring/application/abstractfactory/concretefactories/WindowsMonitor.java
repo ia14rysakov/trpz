@@ -5,16 +5,14 @@ import com.example.activitymonitor.monitoring.application.abstractfactory.Abstra
 import com.example.activitymonitor.monitoring.application.service.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
+@Component
 public class WindowsMonitor extends AbstractMonitor {
 
     private String osType = "Windows";
-
-    public WindowsMonitor(String osType) {
-        super(osType);
-    }
 
     @Override
     public Monitoring setCpuLoadMonitor() {

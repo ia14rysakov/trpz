@@ -1,24 +1,25 @@
-package com.example.activitymonitor.monitoring.application.visitor;
+package com.example.activitymonitor.report.application.visitor;
 
 import com.example.activitymonitor.monitoring.application.service.*;
 import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@Component
 public class ScheduledReportGenerator implements ReportVisitor {
 
     private LocalDateTime start;
     private LocalDateTime end;
 
-    public ScheduledReportGenerator(LocalDateTime start, LocalDateTime end) {
-        this.start = start;
-        this.end = end;
+    @Override
+    public String getReportName() {
+        return "ScheduledReport";
     }
-
 
     @Override
     public Report visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
