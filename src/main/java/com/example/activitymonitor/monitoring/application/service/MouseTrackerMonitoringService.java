@@ -13,6 +13,8 @@ import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+import java.time.Duration;
+
 public class MouseTrackerMonitoringService implements Monitoring {
     private FluxSink<String> cordsSink;
     private Flux<String> keysFlux;
@@ -41,7 +43,10 @@ public class MouseTrackerMonitoringService implements Monitoring {
 
         GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 
-        return mouseTracker.getCordsFlux().cast(MonitoringPoint.class)
+        return mouseTracker.getCordsFlux()
+                .cast(MonitoringPoint.class)
+                .window(Duration.ofSeconds(1)) // Creates windows of 1 second
+                .flatMap(Flux::last) // Takes the last element from each window
                 .takeWhile(key -> isMonitoringStarted);
     }
 }
