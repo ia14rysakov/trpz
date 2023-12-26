@@ -30,7 +30,7 @@ public class CpuLoadMonitoringService implements Monitoring {
         CentralProcessor processor = si.getHardware().getProcessor();
         return Flux.generate(sink -> {
             if (isMonitoringStarted) {
-                double cpuLoad = processor.getSystemCpuLoad(1000) * 100;
+                double cpuLoad = processor.getSystemCpuLoad(1000) * 1000;
                 sink.next(new CPUMonitoringPoint(cpuLoad));
             } else {
                 sink.complete();
