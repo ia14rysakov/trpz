@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,33 +28,33 @@ public class ReportByTimeGenerator implements ReportVisitor {
     }
 
     @Override
-    public Report visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
+    public Mono<Report> visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
         return commonVisitor(cpuLoadMonitoringService, "CPU Load Monitoring");
     }
 
     @Override
-    public Report visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
+    public Mono<Report> visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
         return commonVisitor(keyLoggerMonitoringService, "Key Logger Monitoring");
     }
 
     @Override
-    public Report visit(MemoryMonitoringService memoryMonitoringService) {
+    public Mono<Report> visit(MemoryMonitoringService memoryMonitoringService) {
         return commonVisitor(memoryMonitoringService, "Memory Monitoring");
     }
 
     @Override
-    public Report visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
+    public Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
 
         return commonVisitor(mouseTrackerMonitoringService, "Mouse Tracker Monitoring");
     }
 
     @Override
-    public Report visit(WindowsMonitoringService windowsMonitoringService) {
+    public Mono<Report> visit(WindowsMonitoringService windowsMonitoringService) {
 
         return commonVisitor(windowsMonitoringService, "Windows Monitoring");
     }
 
-    private Report commonVisitor(Monitoring monitoringService, String serviceName) {
+    private Mono<Report> commonVisitor(Monitoring monitoringService, String serviceName) {
         if (dueToTime == null) {
             throw new IllegalStateException("dueToTime must be set before generating a report");
         }
@@ -64,13 +65,11 @@ public class ReportByTimeGenerator implements ReportVisitor {
         Flux<MonitoringPoint> dataFlux = monitoringService.startMonitoring(true)
                 .takeWhile(point -> LocalDateTime.now().isBefore(dueToTime));
 
-        List<MonitoringPoint> data = dataFlux.collectList().block();
-
-        String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
-
-        Report report = new Report(title, duration, getReportName());
-        report.setData(data);
-
-        return report;
+        return dataFlux.collectList().map(data -> {
+            String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
+            Report report = new Report(title, duration, getReportName());
+            report.setData(data);
+            return report;
+        });
     }
 }

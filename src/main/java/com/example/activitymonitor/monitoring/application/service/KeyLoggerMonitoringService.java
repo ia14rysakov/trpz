@@ -9,6 +9,7 @@ import com.example.activitymonitor.report.domain.Report;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class KeyLoggerMonitoringService implements Monitoring {
 
@@ -18,7 +19,7 @@ public class KeyLoggerMonitoringService implements Monitoring {
     }
 
     @Override
-    public Report accept(ReportVisitor reportVisitor) {
+    public Mono<Report> accept(ReportVisitor reportVisitor) {
         return reportVisitor.visit(this);
     }
 

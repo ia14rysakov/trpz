@@ -7,11 +7,11 @@ import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Setter
@@ -27,49 +27,49 @@ public class ReportStartStopGenerator implements ReportVisitor {
     }
 
     @Override
-    public Report visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
+    public Mono<Report> visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
         return defaultVisiting(cpuLoadMonitoringService, "CPU Load Monitoring");
     }
 
     @Override
-    public Report visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
+    public Mono<Report> visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
         return defaultVisiting(keyLoggerMonitoringService, "Key Logger Monitoring");
     }
 
     @Override
-    public Report visit(MemoryMonitoringService memoryMonitoringService) {
+    public Mono<Report> visit(MemoryMonitoringService memoryMonitoringService) {
         return defaultVisiting(memoryMonitoringService, "Memory Monitoring");
     }
 
     @Override
-    public Report visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
+    public Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
         return defaultVisiting(mouseTrackerMonitoringService, "Mouse Tracker Monitoring");
     }
 
     @Override
-    public Report visit(WindowsMonitoringService windowsMonitoringService) {
+    public Mono<Report> visit(WindowsMonitoringService windowsMonitoringService) {
         return defaultVisiting(windowsMonitoringService, "Windows Monitoring");
     }
 
-    private Report defaultVisiting(Monitoring monitoring, String serviceName) {
+    private Mono<Report> defaultVisiting(Monitoring monitoring, String serviceName) {
         LocalDateTime startTime = LocalDateTime.now();
 
-        List<MonitoringPoint> data = new ArrayList<>();
-        monitoring.startMonitoring(true)
+        return monitoring.startMonitoring(true)
                 .takeWhile(point -> isMonitoringStarted)
                 .doOnError(e -> {
                     //TODO log exception
                 })
-                .subscribe(data::add);
+                .collectList()
+                .map(data -> {
+                    LocalDateTime endTime = LocalDateTime.now();
+                    Duration duration = Duration.between(startTime, endTime);
 
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration duration = Duration.between(startTime, endTime);
+                    String title = serviceName + " Report - from " + startTime + " to " + endTime;
 
-        String title = serviceName + " Report - from " + startTime + " to " + endTime;
+                    Report report = new Report(title, duration, getReportName());
+                    report.setData(data);
 
-        Report report = new Report(title, duration, getReportName());
-        report.setData(data);
-
-        return report;
+                    return report;
+                });
     }
 }

@@ -11,6 +11,7 @@ import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
@@ -28,7 +29,7 @@ public class WindowsMonitoringService implements Monitoring {
     }
 
     @Override
-    public Report accept(ReportVisitor reportVisitor) {
+    public Mono<Report> accept(ReportVisitor reportVisitor) {
         return reportVisitor.visit(this);
     }
 

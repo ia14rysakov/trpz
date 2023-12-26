@@ -28,35 +28,35 @@ public class ScheduledReportGenerator implements ReportVisitor {
     }
 
     @Override
-    public Report visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
+    public Mono<Report> visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
         return defaultVisiting(cpuLoadMonitoringService, "CPU Load Monitoring");
     }
 
     @Override
-    public Report visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
+    public Mono<Report> visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
 
         return defaultVisiting(keyLoggerMonitoringService, "Key Logger Monitoring");
     }
 
     @Override
-    public Report visit(MemoryMonitoringService memoryMonitoringService) {
+    public Mono<Report> visit(MemoryMonitoringService memoryMonitoringService) {
 
         return defaultVisiting(memoryMonitoringService, "Memory Monitoring");
     }
 
     @Override
-    public Report visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
+    public Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
 
         return defaultVisiting(mouseTrackerMonitoringService, "Mouse Tracker Monitoring");
     }
 
     @Override
-    public Report visit(WindowsMonitoringService windowsMonitoringService) {
+    public Mono<Report> visit(WindowsMonitoringService windowsMonitoringService) {
 
         return defaultVisiting(windowsMonitoringService, "Windows Monitoring");
     }
 
-    private Report defaultVisiting(Monitoring monitoring, String serviceName) {
+    private Mono<Report> defaultVisiting(Monitoring monitoring, String serviceName) {
 
         if (start == null || end == null) {
             throw new IllegalStateException("Start and end times must be set before generating a report");
@@ -68,16 +68,16 @@ public class ScheduledReportGenerator implements ReportVisitor {
         Flux<MonitoringPoint> dataFlux = monitoring.startMonitoring(true)
                 .takeWhile(point -> LocalDateTime.now().isBefore(end));
 
-        List<MonitoringPoint> data = delayMono.thenMany(dataFlux).collectList().block();
+        return delayMono.thenMany(dataFlux).collectList().map(data -> {
+            LocalDateTime endTime = LocalDateTime.now();
+            Duration duration = Duration.between(start, endTime);
 
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration duration = Duration.between(start, endTime);
+            String title = serviceName + " Report - from " + start + " to " + end;
 
-        String title = serviceName + " Report - from " + start + " to " + end;
+            Report report = new Report(title, duration, getReportName());
+            report.setData(data);
 
-        Report report = new Report(title, duration, getReportName());
-        report.setData(data);
-
-        return report;
+            return report;
+        });
     }
 }

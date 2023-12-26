@@ -6,6 +6,7 @@ import com.example.activitymonitor.monitoring.domain.points.TestPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +19,7 @@ public class TestMonitoring implements Monitoring {
     }
 
     @Override
-    public Report accept(ReportVisitor reportVisitor) {
+    public Mono<Report> accept(ReportVisitor reportVisitor) {
         return null;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -35,15 +36,13 @@ public class ReportController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Report> getReport(@RequestBody ReportRequestDto reportRequestDto) {
+    public Mono<Report> getReport(@RequestBody ReportRequestDto reportRequestDto) {
         String reportType = reportRequestDto.getReportType();
 
         AbstractMonitor currentMonitor = monitorMap.get(reportRequestDto.getOsType());
 
         ReportVisitor reportVisitor = reportVisitorMap.get(reportType);
 
-        Report report = currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor);
-
-        return ResponseEntity.ok(report);
+        return currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor);
     }
 }

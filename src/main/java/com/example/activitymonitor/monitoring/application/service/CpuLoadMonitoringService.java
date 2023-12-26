@@ -8,6 +8,7 @@ import com.example.activitymonitor.report.domain.Report;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
@@ -19,7 +20,7 @@ public class CpuLoadMonitoringService implements Monitoring {
     }
 
     @Override
-    public Report accept(ReportVisitor reportVisitor) {
+    public Mono<Report> accept(ReportVisitor reportVisitor) {
         return reportVisitor.visit(this);
     }
 

@@ -12,6 +12,7 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
@@ -25,7 +26,7 @@ public class MouseTrackerMonitoringService implements Monitoring {
     }
 
     @Override
-    public Report accept(ReportVisitor reportVisitor) {
+    public Mono<Report> accept(ReportVisitor reportVisitor) {
         return reportVisitor.visit(this);
     }
 
