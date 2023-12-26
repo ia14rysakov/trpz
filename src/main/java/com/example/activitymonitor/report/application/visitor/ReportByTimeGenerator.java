@@ -12,15 +12,13 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @Component
 public class ReportByTimeGenerator implements ReportVisitor {
 
-    private LocalDateTime dueToTime = LocalDateTime.now().plusSeconds(10);
+    private LocalDateTime dueToTime = LocalDateTime.now().plusMinutes(1);
 
     @Override
     public String getReportName() {
