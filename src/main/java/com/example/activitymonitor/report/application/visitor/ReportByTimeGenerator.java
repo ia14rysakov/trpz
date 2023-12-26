@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class ReportByTimeGenerator implements ReportVisitor {
 
-    private LocalDateTime dueToTime = null;
+    private LocalDateTime dueToTime = LocalDateTime.now().plusSeconds(10);
 
     @Override
     public String getReportName() {

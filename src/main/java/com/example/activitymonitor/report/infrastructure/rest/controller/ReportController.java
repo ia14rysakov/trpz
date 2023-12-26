@@ -32,7 +32,6 @@ public class ReportController {
         this.monitorMap = monitorList
                 .stream()
                 .collect(Collectors.toMap(AbstractMonitor::getOsType, Function.identity()));
-
     }
 
     @PostMapping("")
