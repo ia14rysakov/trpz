@@ -10,10 +10,6 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Stream;
-
 public class KeyLoggerMonitoringService implements Monitoring {
 
     @Override
@@ -41,7 +37,8 @@ public class KeyLoggerMonitoringService implements Monitoring {
 
         GlobalScreen.addNativeKeyListener(keyListener);
 
-        return Flux.defer(() -> Flux.fromIterable(keyListener.getKeys()))
-                .map(KeyLoggerMonitoringPoint::new);
+        return keyListener.getKeysFlux()
+                .map(key -> (MonitoringPoint) new KeyLoggerMonitoringPoint(key))
+                .takeWhile(key -> isMonitoringStarted);
     }
 }

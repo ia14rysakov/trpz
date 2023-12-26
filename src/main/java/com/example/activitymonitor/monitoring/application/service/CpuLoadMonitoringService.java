@@ -10,8 +10,6 @@ import oshi.hardware.CentralProcessor;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class CpuLoadMonitoringService implements Monitoring {
 

@@ -3,6 +3,8 @@ package com.example.activitymonitor.monitoring.application.service.jnative;
 import lombok.Getter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +12,25 @@ import java.util.logging.Logger;
 
 @Getter
 public class KeyListener implements NativeKeyListener {
-    private List<String> keys = new ArrayList<>();
+    private FluxSink<String> keysSink;
+    private Flux<String> keysFlux;
+
+    public KeyListener() {
+        this.keysFlux = Flux.<String>create(sink -> this.keysSink = sink).share();
+    }
 
     @Override
     public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) {
         String keyText = NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode());
-        keys.add(keyText);
-        logger.log(java.util.logging.Level.INFO, "Key Pressed: " + keyText);
+        keysSink.next(keyText);
+        logger.log(java.util.logging.Level.INFO, "Key Typed: " + keyText);
     }
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-
+        String keyText = NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode());
+        keysSink.next(keyText);
+        Logger.getLogger(KeyListener.class.getName()).info("Key Pressed: " + keyText);
     }
 
     @Override
