@@ -29,7 +29,8 @@ public class MemoryMonitoringService implements Monitoring {
         return Flux.generate(sink -> {
             if (isMonitoringStarted) {
                 Runtime runtime = Runtime.getRuntime();
-                double memoryUsage = (double) (runtime.totalMemory() - runtime.freeMemory()) / runtime.totalMemory();
+                double memoryUsage = (double)
+                        ((runtime.totalMemory() - runtime.freeMemory()) / runtime.totalMemory()) * 100;
                 sink.next(new MemoryMonitoringPoint(memoryUsage));
             } else {
                 sink.complete();
