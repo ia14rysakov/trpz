@@ -2,7 +2,6 @@ package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.service.jnative.KeyListener;
-import com.example.activitymonitor.monitoring.application.service.jnative.KeyLoggingDispatcher;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.domain.points.KeyLoggerMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
@@ -28,15 +27,15 @@ public class KeyLoggerMonitoringService implements Monitoring {
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         KeyListener keyListener = new KeyListener();
 
-            GlobalScreen.setEventDispatcher(new KeyLoggingDispatcher());
-//        try {
-//        } catch (NativeHookException ex) {
-//            System.err.println("There was a problem registering the native hook.");
-//            System.err.println(ex.getMessage());
-//            System.exit(1);
-//        }
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException ex) {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
 
-//        GlobalScreen.addNativeKeyListener(keyListener);
+        GlobalScreen.addNativeKeyListener(keyListener);
 
         return keyListener.getKeysFlux()
                 .map(key -> (MonitoringPoint) new KeyLoggerMonitoringPoint(key))
