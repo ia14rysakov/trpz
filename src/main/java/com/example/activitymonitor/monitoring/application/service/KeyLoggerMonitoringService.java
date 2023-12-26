@@ -27,6 +27,14 @@ public class KeyLoggerMonitoringService implements Monitoring {
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         KeyListener keyListener = new KeyListener();
 
+//        try {
+//            GlobalScreen.registerNativeHook();
+//        } catch (NativeHookException ex) {
+//            System.err.println("There was a problem registering the native hook.");
+//            System.err.println(ex.getMessage());
+//            System.exit(1);
+//        }
+
         GlobalScreen.addNativeKeyListener(keyListener);
 
         return keyListener.getKeysFlux()
