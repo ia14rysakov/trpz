@@ -23,18 +23,19 @@ const CpuMonitoringPage = () => {
                     monitoringType: "cpuLoad",
                     osType: "Windows"
                 });
+                response.data.forEach(point => {
+                    console.log('Incoming point:', point); // Log each incoming point
 
-                // Adjusting for CPUMonitoringPoint structure
-                const labels = response.data.map(point =>
-                    new Date(point.timestamp).toLocaleTimeString()
-                );
-                const data = response.data.map(point => point.cpuUsage);
-
-                setChartData({
-                    ...chartData,
-                    labels,
-                    datasets: [{ ...chartData.datasets[0], data }]
+                    // Append to chart data
+                    setChartData(prevData => ({
+                        labels: [...prevData.labels, new Date(point.timestamp).toLocaleTimeString()],
+                        datasets: [{
+                            ...prevData.datasets[0],
+                            data: [...prevData.datasets[0].data, point.cpuUsage]
+                        }]
+                    }));
                 });
+
             } catch (error) {
                 console.error('Error sending monitoring request:', error);
             }
