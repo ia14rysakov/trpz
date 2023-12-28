@@ -1,114 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    TimeScale,
-} from 'chart.js';
-import 'chartjs-adapter-date-fns';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    TimeScale,
-    Title,
-    Tooltip,
-    Legend
-);
 
 const CpuMonitoringPage = () => {
-    const [cpuData, setCpuData] = useState([]);
-    const location = useLocation();
+    const [monitoringType, setMonitoringType] = useState('');
+    const [osType, setOsType] = useState('');
+    const [monitoringPoints, setMonitoringPoints] = useState([]);
 
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const osType = queryParams.get('osType');
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        // Function to start the monitoring
-        const startMonitoring = async () => {
-            try {
-                await axios.post('http://localhost:8080/monitoring/start', {
-                    monitoringType: 'cpuLoad',
-                    osType: osType,
-                });
-            } catch (error) {
-                console.error('Error starting monitoring:', error);
-            }
-        };
+        try {
+            const response = await axios.post('http://localhost:8080/start', {
+                monitoringType: "cpuLoad",
+                osType: "Windows"
+            });
 
-        // Initialize monitoring and setup SSE
-        startMonitoring().then(() => {
-            const eventSource = new EventSource(`http://localhost:8080/monitoring/test?osType=${osType}`);
-
-            eventSource.onmessage = (event) => {
-                const newCpuPoint = JSON.parse(event.data);
-                console.log('New CPU data received:', newCpuPoint); // Log incoming data
-                setCpuData((prevData) => [...prevData, newCpuPoint]);
-            };
-
-            eventSource.onerror = (error) => {
-                console.error('EventSource failed:', error);
-                eventSource.close();
-            };
-
-            return () => eventSource.close();
-        });
-    }, [location]);
-
-    const data = {
-        labels: cpuData.map((point) => new Date(point.timestamp).toLocaleTimeString()),
-        datasets: [
-            {
-                label: 'CPU Usage (%)',
-                data: cpuData.map((point) => point.cpuUsage),
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            },
-        ],
-    };
-
-    const options = {
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'second',
-                    displayFormats: {
-                        second: 'h:mm:ss a',
-                    },
-                },
-            },
-            y: {
-                beginAtZero: true,
-            },
-        },
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'CPU Load Over Time',
-            },
-        },
+            setMonitoringPoints(response.data); // assuming the data is an array of MonitoringPoints
+        } catch (error) {
+            console.error('Error sending monitoring request:', error);
+        }
     };
 
     return (
         <div>
-            <h1>CPU Monitoring</h1>
-            <Line data={data} options={options} />
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Monitoring Type:
+                    <input type="text" value={monitoringType} onChange={(e) => setMonitoringType(e.target.value)} />
+                </label>
+                <br />
+                <label>
+                    OS Type:
+                    <input type="text" value={osType} onChange={(e) => setOsType(e.target.value)} />
+                </label>
+                <br />
+                <button type="submit">Start Monitoring</button>
+            </form>
+
+            {monitoringPoints.length > 0 && (
+                <div>
+                    <h3>Monitoring Points:</h3>
+                    <ul>
+                        {monitoringPoints.map((point, index) => (
+                            <li key={index}>{JSON.stringify(point)}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };
