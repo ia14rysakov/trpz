@@ -16,7 +16,7 @@ const CpuMonitoringPage = () => {
     });
 
     useEffect(() => {
-        const eventSource = new EventSource('http://localhost:8080/cpuLoad');
+        const eventSource = new EventSource('http://localhost:8080/monitoring/cpuLoad');
         eventSource.onmessage = (event) => {
             const point = JSON.parse(event.data);
 
