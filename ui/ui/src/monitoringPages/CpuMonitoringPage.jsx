@@ -1,52 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 const CpuMonitoringPage = () => {
-    const [monitoringType, setMonitoringType] = useState('');
-    const [osType, setOsType] = useState('');
-    const [monitoringPoints, setMonitoringPoints] = useState([]);
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [
+            {
+                label: 'CPU Usage',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            },
+        ],
+    });
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.post('http://localhost:8080/monitoring/start', {
+                    monitoringType: "cpuLoad",
+                    osType: "Windows"
+                });
 
-        try {
-            const response = await axios.post('http://localhost:8080/start', {
-                monitoringType: "cpuLoad",
-                osType: "Windows"
-            });
+                // Adjusting for CPUMonitoringPoint structure
+                const labels = response.data.map(point =>
+                    new Date(point.timestamp).toLocaleTimeString()
+                );
+                const data = response.data.map(point => point.cpuUsage);
 
-            setMonitoringPoints(response.data); // assuming the data is an array of MonitoringPoints
-        } catch (error) {
-            console.error('Error sending monitoring request:', error);
-        }
-    };
+                setChartData({
+                    ...chartData,
+                    labels,
+                    datasets: [{ ...chartData.datasets[0], data }]
+                });
+            } catch (error) {
+                console.error('Error sending monitoring request:', error);
+            }
+        };
+
+        fetchData();
+    }, []); // Empty dependency array ensures this effect runs once on mount
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Monitoring Type:
-                    <input type="text" value={monitoringType} onChange={(e) => setMonitoringType(e.target.value)} />
-                </label>
-                <br />
-                <label>
-                    OS Type:
-                    <input type="text" value={osType} onChange={(e) => setOsType(e.target.value)} />
-                </label>
-                <br />
-                <button type="submit">Start Monitoring</button>
-            </form>
-
-            {monitoringPoints.length > 0 && (
-                <div>
-                    <h3>Monitoring Points:</h3>
-                    <ul>
-                        {monitoringPoints.map((point, index) => (
-                            <li key={index}>{JSON.stringify(point)}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <h2>CPU Usage Graph</h2>
+            <Line data={chartData} />
         </div>
     );
 };
