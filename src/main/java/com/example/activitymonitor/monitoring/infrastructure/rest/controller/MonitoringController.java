@@ -28,6 +28,16 @@ public class MonitoringController {
                 .collect(Collectors.toMap(AbstractMonitor::getOsType, Function.identity()));
     }
 
+    @GetMapping("/cpuLoad/{osType}")
+    public Flux<MonitoringPoint> startCpuMonitoring(@PathVariable String osType) {
+        logger.info("Monitoring request: cpuLoad on " + osType);
+
+
+        AbstractMonitor abstractMonitor = monitorMap.get(osType);
+
+        return abstractMonitor.startMonitoring("cpuLoad");
+    }
+
     @PostMapping("/start")
     public Flux<MonitoringPoint> startMonitoring(@RequestBody MonitoringRequestDto monitoringRequestDto) {
         logger.info("Monitoring request: " + monitoringRequestDto.toString());
