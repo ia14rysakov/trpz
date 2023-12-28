@@ -11,8 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 public class CpuLoadMonitoringService implements Monitoring {
+
+    private Logger logger = Logger.getLogger(CpuLoadMonitoringService.class.getName());
 
     @Override
     public String getMonitoringName() {
@@ -32,6 +35,7 @@ public class CpuLoadMonitoringService implements Monitoring {
         return Flux.generate(sink -> {
             if (isMonitoringStarted) {
                 double cpuLoad = processor.getSystemCpuLoad(1000) * 1000;
+                logger.info("CPU load: " + cpuLoad);
                 sink.next(new CPUMonitoringPoint(cpuLoad));
             } else {
                 sink.complete();
