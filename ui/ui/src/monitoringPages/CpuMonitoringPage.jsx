@@ -33,11 +33,11 @@ const CpuMonitoringPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
 
-        // Use EventSource for SSE
         const eventSource = new EventSource(`http://localhost:8080/monitoring/start?monitoringType=cpuLoad&osType=${osType}`);
 
         eventSource.onmessage = (event) => {
             const newCpuPoint = JSON.parse(event.data);
+            console.log('New CPU data received:', newCpuPoint); // Log incoming data
             setCpuData((prevData) => [...prevData, newCpuPoint]);
         };
 
