@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     Chart as ChartJS,
@@ -33,22 +34,35 @@ const CpuMonitoringPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
 
-        const eventSource = new EventSource(`http://localhost:8080/monitoring/start?monitoringType=cpuLoad&osType=${osType}`);
-
-        eventSource.onmessage = (event) => {
-            const newCpuPoint = JSON.parse(event.data);
-            console.log('New CPU data received:', newCpuPoint); // Log incoming data
-            setCpuData((prevData) => [...prevData, newCpuPoint]);
+        // Function to start the monitoring
+        const startMonitoring = async () => {
+            try {
+                await axios.post('http://localhost:8080/monitoring/start', {
+                    monitoringType: 'cpuLoad',
+                    osType: osType,
+                });
+            } catch (error) {
+                console.error('Error starting monitoring:', error);
+            }
         };
 
-        eventSource.onerror = (error) => {
-            console.error('EventSource failed:', error);
-            eventSource.close();
-        };
+        // Initialize monitoring and setup SSE
+        startMonitoring().then(() => {
+            const eventSource = new EventSource(`http://localhost:8080/monitoring/test?osType=${osType}`);
 
-        return () => {
-            eventSource.close();
-        };
+            eventSource.onmessage = (event) => {
+                const newCpuPoint = JSON.parse(event.data);
+                console.log('New CPU data received:', newCpuPoint); // Log incoming data
+                setCpuData((prevData) => [...prevData, newCpuPoint]);
+            };
+
+            eventSource.onerror = (error) => {
+                console.error('EventSource failed:', error);
+                eventSource.close();
+            };
+
+            return () => eventSource.close();
+        });
     }, [location]);
 
     const data = {

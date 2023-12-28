@@ -10,11 +10,11 @@ const TestMonitoringPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
 
-        // Endpoint URL could be something like '/monitoring/testmonitoring'
-        const eventSource = new EventSource(`http://localhost:8080/monitoring/testmonitoring?osType=${osType}`);
+        const eventSource = new EventSource(`http://localhost:8080/monitoring/test`);
 
         eventSource.onmessage = (event) => {
             const newTestPoint = JSON.parse(event.data);
+            console.log('New Test data received:', newTestPoint); // Log incoming data
             setTestData(prevTestPoints => [...prevTestPoints, newTestPoint.test]);
         };
 
