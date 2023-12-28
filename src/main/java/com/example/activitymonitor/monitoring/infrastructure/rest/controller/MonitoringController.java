@@ -4,7 +4,6 @@ import com.example.activitymonitor.monitoring.application.abstractfactory.Abstra
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.infrastructure.rest.dto.MonitoringRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 

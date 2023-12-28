@@ -15,5 +15,4 @@ public class WindowsPoint {
         this.cpuUsage = cpuUsage;
         this.memoryUsage = memoryUsage;
     }
-
 }
