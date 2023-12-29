@@ -122,7 +122,6 @@ const MemoryMonitoringPage = () => {
                     <InputLabel>Report Type</InputLabel>
                     <Select value={reportType} label="Report Type" onChange={e => setReportType(e.target.value)}>
                         <MenuItem value="ReportByTime">Report by Time</MenuItem>
-                        <MenuItem value="ReportStartStop">Report Start/Stop</MenuItem>
                         <MenuItem value="ScheduledReport">Scheduled Report</MenuItem>
                     </Select>
                 </FormControl>
