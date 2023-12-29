@@ -34,7 +34,7 @@ public class MonitoringController {
     public Flux<MonitoringPoint> startCpuMonitoring() {
         logger.info("Starting cpu load monitoring");
 
-       MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("cpuLoad", "Windows");
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("cpuLoad", "Windows");
 
         return getMonitoringPoints(monitoringRequestDto);
     }
@@ -67,10 +67,18 @@ public class MonitoringController {
     }
 
     @GetMapping("/mouseTracker")
-    public Flux<MonitoringPoint> startMouseTracker() {
-        logger.info("Monitoring request: cpuLoad on " + osType);
+    public Flux<MonitoringPoint> startMonitoringTracker() {
 
         MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("mouseTracker", "Windows");
+
+        return getMonitoringPoints(monitoringRequestDto);
+    }
+
+    @GetMapping("/{monitoringType}/{osType}")
+    public Flux<MonitoringPoint> startMouseTracker(@PathVariable String osType, @PathVariable String monitoringType) {
+        logger.info("Monitoring request:"+ monitoringType +" on " + osType);
+
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto(monitoringType, osType);
 
         return getMonitoringPoints(monitoringRequestDto);
     }
