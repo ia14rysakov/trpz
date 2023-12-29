@@ -6,44 +6,44 @@ const KeyLoggerMonitoringPage = () => {
     const [keysPressed, setKeysPressed] = useState([]);
     const location = useLocation();
 
-    const handleReportRequest = () => {
-        const reportRequestDto = {
-            reportType,
-            monitoringType: "keyLogger",
-            osType,
-            dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
-            isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
-            scheduleStart: reportType === 'ScheduledReport' ? scheduleStart : undefined,
-            scheduleEnd: reportType === 'ScheduledReport' ? scheduleEnd : undefined,
-        };
-
-        fetch('http://localhost:8080/report/download', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reportRequestDto),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'report.pdf';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    };
+    // const handleReportRequest = () => {
+    //     const reportRequestDto = {
+    //         reportType,
+    //         monitoringType: "keyLogger",
+    //         osType,
+    //         dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
+    //         isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
+    //         scheduleStart: reportType === 'ScheduledReport' ? scheduleStart : undefined,
+    //         scheduleEnd: reportType === 'ScheduledReport' ? scheduleEnd : undefined,
+    //     };
+    //
+    //     fetch('http://localhost:8080/report/download', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(reportRequestDto),
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.blob();
+    //         })
+    //         .then(blob => {
+    //             const url = window.URL.createObjectURL(blob);
+    //             const a = document.createElement('a');
+    //             a.href = url;
+    //             a.download = 'report.pdf';
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             a.remove();
+    //             window.URL.revokeObjectURL(url);
+    //         })
+    //         .catch(error => {
+    //             console.error('Fetch error:', error);
+    //         });
+    // };
 
 
     useEffect(() => {
