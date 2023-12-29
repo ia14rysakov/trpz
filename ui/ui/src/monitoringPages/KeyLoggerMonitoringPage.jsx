@@ -10,7 +10,7 @@ const KeyLoggerMonitoringPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
 
-        const eventSource = new EventSource(`http://localhost:8080/monitoring/keylogger`);
+        const eventSource = new EventSource(`http://localhost:8080/monitoring/keyLogger`);
 
         eventSource.onmessage = (event) => {
             const newKey = JSON.parse(event.data);
