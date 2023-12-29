@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class CpuLoadMonitoringService implements Monitoring {
 
-    private Logger logger = Logger.getLogger(CpuLoadMonitoringService.class.getName());
+    private final Logger logger = Logger.getLogger(CpuLoadMonitoringService.class.getName());
 
     @Override
     public String getMonitoringName() {
@@ -27,7 +27,6 @@ public class CpuLoadMonitoringService implements Monitoring {
     public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
         return reportVisitor.visit(this, reportRequestDto);
     }
-
 
     @Override
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
