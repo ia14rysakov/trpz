@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { useLocation } from 'react-router-dom';
+
 import 'chart.js/auto';
 
 const MemoryMonitoringPage = () => {
@@ -14,6 +16,8 @@ const MemoryMonitoringPage = () => {
             },
         ],
     });
+    const location = useLocation();
+
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
