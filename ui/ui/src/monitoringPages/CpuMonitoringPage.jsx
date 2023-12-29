@@ -28,7 +28,7 @@ const CpuMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "test",
+            monitoringType: "cpuLoad",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
