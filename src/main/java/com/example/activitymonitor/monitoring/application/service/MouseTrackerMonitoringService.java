@@ -18,6 +18,9 @@ import java.time.Duration;
 
 public class MouseTrackerMonitoringService implements Monitoring {
 
+    private volatile MouseTrackerMonitoringPoint lastEmittedPoint = null;
+
+
     @Override
     public String getMonitoringName() {
         return "MouseTracker";
@@ -42,16 +45,12 @@ public class MouseTrackerMonitoringService implements Monitoring {
 
         GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 
-        Flux<MonitoringPoint> mouseMovementFlux = mouseTracker.getCordsFlux()
-                .cast(MonitoringPoint.class);
-
-        Flux<MonitoringPoint> heartbeatFlux = Flux.interval(Duration.ofSeconds(1))
-                .map(tick -> new MouseTrackerMonitoringPoint("0", "0"))
-                .cast(MonitoringPoint.class);
-
-        return Flux.merge(mouseMovementFlux, heartbeatFlux)
+        return mouseTracker.getCordsFlux()
+                .doOnNext(point -> lastEmittedPoint = point)
+                .cast(MonitoringPoint.class)
                 .window(Duration.ofSeconds(1))
                 .flatMap(Flux::last)
+                .switchIfEmpty(Mono.defer(() -> Mono.justOrEmpty(lastEmittedPoint)))
                 .takeWhile(key -> isMonitoringStarted);
     }
 }
