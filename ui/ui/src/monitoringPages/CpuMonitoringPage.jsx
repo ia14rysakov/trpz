@@ -1,58 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
-import { useLocation } from 'react-router-dom';
-import 'chart.js/auto';
+import React, { useState } from 'react';
 
 const CpuMonitoringPage = () => {
-    const [chartData, setChartData] = useState({
-        labels: [],
-        datasets: [
-            {
-                label: 'CPU Usage',
-                data: [],
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-            },
-        ],
-    });
-    const location = useLocation();
+    const [osType, setOsType] = useState('linux');
+    const [reportType, setReportType] = useState('ReportByTime');
+    const [dueToTime, setDueToTime] = useState('');
+    const [isReportGoing, setIsReportGoing] = useState(false);
+    const [scheduleStart, setScheduleStart] = useState('');
+    const [scheduleEnd, setScheduleEnd] = useState('');
 
-
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const osType = queryParams.get('osType');
-        const monitoringType = queryParams.get('monitoringType');
-
-        const eventSource = new EventSource(`http://localhost:8080/monitoring/${monitoringType}/${osType}`);
-        eventSource.onmessage = (event) => {
-            const point = JSON.parse(event.data);
-
-            console.log('Incoming point:', point); // Log each incoming point
-
-            // Append to chart data
-            setChartData(prevData => ({
-                labels: [...prevData.labels, new Date(point.timestamp).toLocaleTimeString()],
-                datasets: [{
-                    ...prevData.datasets[0],
-                    data: [...prevData.datasets[0].data, point.cpuUsage]
-                }]
-            }));
+    const handleReportRequest = () => {
+        const reportRequestDto = {
+            reportType,
+            osType,
+            // Add other parameters based on reportType
         };
 
-        eventSource.onerror = (error) => {
-            console.error('EventSource failed:', error);
-            eventSource.close();
-        };
-
-        return () => {
-            eventSource.close();
-        };
-    }, []); // Empty dependency array ensures this effect runs once on mount
+        // Logic to send request to backend
+        console.log('Report Request:', reportRequestDto);
+    };
 
     return (
         <div>
             <h2>CPU Usage Graph</h2>
-            <Line data={chartData} />
+            {/* Existing Line chart component here */}
+
+            <div>
+                <h3>Generate Report</h3>
+                <div>
+                    <label>OS Type:</label>
+                    <select value={osType} onChange={e => setOsType(e.target.value)}>
+                        <option value="linux">Linux</option>
+                        <option value="windows">Windows</option>
+                        <option value="macOs">macOS</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Report Type:</label>
+                    <select value={reportType} onChange={e => setReportType(e.target.value)}>
+                        <option value="ReportByTime">Report by Time</option>
+                        <option value="ReportStartStop">Report Start/Stop</option>
+                        <option value="ScheduledReport">Scheduled Report</option>
+                    </select>
+                </div>
+
+                {reportType === 'ReportByTime' && (
+                    <div>
+                        <label>Due To Time:</label>
+                        <input
+                            type="datetime-local"
+                            value={dueToTime}
+                            onChange={e => setDueToTime(e.target.value)}
+                        />
+                    </div>
+                )}
+
+                {reportType === 'ReportStartStop' && (
+                    <div>
+                        <label>Is Report Going:</label>
+                        <input
+                            type="checkbox"
+                            checked={isReportGoing}
+                            onChange={e => setIsReportGoing(e.target.checked)}
+                        />
+                    </div>
+                )}
+
+                {reportType === 'ScheduledReport' && (
+                    <div>
+                        <label>Start Time:</label>
+                        <input
+                            type="datetime-local"
+                            value={scheduleStart}
+                            onChange={e => setScheduleStart(e.target.value)}
+                        />
+                        <label>End Time:</label>
+                        <input
+                            type="datetime-local"
+                            value={scheduleEnd}
+                            onChange={e => setScheduleEnd(e.target.value)}
+                        />
+                    </div>
+                )}
+
+                <button onClick={handleReportRequest}>Generate Report</button>
+            </div>
         </div>
     );
 };

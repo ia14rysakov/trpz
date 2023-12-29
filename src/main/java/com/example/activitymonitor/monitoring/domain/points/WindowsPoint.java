@@ -1,8 +1,10 @@
 package com.example.activitymonitor.monitoring.domain.points;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class WindowsPoint {
     private String windowName;
     private String windowSize;

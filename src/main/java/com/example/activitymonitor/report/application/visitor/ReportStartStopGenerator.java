@@ -2,7 +2,6 @@ package com.example.activitymonitor.report.application.visitor;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.service.*;
-import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.report.domain.Report;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,15 +10,13 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Setter
 @Getter
 @Component
 public class ReportStartStopGenerator implements ReportVisitor {
 
-    private boolean isMonitoringStarted = false;
+    private boolean isReportGoing = false;
 
     @Override
     public String getReportName() {
@@ -55,7 +52,7 @@ public class ReportStartStopGenerator implements ReportVisitor {
         LocalDateTime startTime = LocalDateTime.now();
 
         return monitoring.startMonitoring(true)
-                .takeWhile(point -> isMonitoringStarted)
+                .takeWhile(point -> isReportGoing)
                 .doOnError(e -> {
                     //TODO log exception
                 })

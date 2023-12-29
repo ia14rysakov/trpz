@@ -26,6 +26,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.data:spring-data-mongodb:4.2.0")
+    implementation("com.itextpdf:itext7-core:7.1.9")
+
 
     //For CPU
     implementation("com.github.oshi:oshi-core:6.4.10")
