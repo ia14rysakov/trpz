@@ -74,14 +74,14 @@ public class MonitoringController {
         return getMonitoringPoints(monitoringRequestDto);
     }
 
-    @GetMapping("/{monitoringType}/{osType}")
-    public Flux<MonitoringPoint> startMouseTracker(@PathVariable String osType, @PathVariable String monitoringType) {
-        logger.info("Monitoring request:"+ monitoringType +" on " + osType);
-
-        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto(monitoringType, osType);
-
-        return getMonitoringPoints(monitoringRequestDto);
-    }
+//    @GetMapping("/{monitoringType}/{osType}")
+//    public Flux<MonitoringPoint> startMouseTracker(@PathVariable String osType, @PathVariable String monitoringType) {
+//        logger.info("Monitoring request:"+ monitoringType +" on " + osType);
+//
+//        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto(monitoringType, osType);
+//
+//        return getMonitoringPoints(monitoringRequestDto);
+//    }
 
     @GetMapping("/test")
     public Flux<MonitoringPoint> test() {
