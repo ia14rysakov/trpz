@@ -9,7 +9,7 @@ const MouseTrackerMonitoringPage = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
-        const monitoringType = queryParams.get('mouseTracker');
+        const monitoringType = queryParams.get('monitoringType');
 
         // Endpoint URL could be something like '/monitoring/mousetracker'
         const eventSource = new EventSource(`http://localhost:8080/monitoring/${monitoringType}/${osType}`);
