@@ -16,7 +16,7 @@ const HomePage = () => {
     };
 
     const navigateToMonitoring = () => {
-        navigate(`/${monitoringType}?osType=${osType}`);
+        navigate(`/${monitoringType}?monitoringType=${monitoringType}&osType=${osType}`);
     };
 
     return (
@@ -38,7 +38,7 @@ const HomePage = () => {
                     <InputLabel id="monitoring-type-label">Monitoring Type</InputLabel>
                     <Select
                         labelId="monitoring-type-label"
-                        id="monitoring-type"
+                        id="monitoringType"
                         value={monitoringType}
                         label="Monitoring Type"
                         onChange={handleMonitoringTypeChange}
