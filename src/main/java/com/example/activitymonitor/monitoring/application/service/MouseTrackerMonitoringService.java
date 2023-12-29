@@ -46,11 +46,10 @@ public class MouseTrackerMonitoringService implements Monitoring {
         GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 
         return mouseTracker.getCordsFlux()
-                .doOnNext(point -> lastEmittedPoint = point)
                 .cast(MonitoringPoint.class)
                 .window(Duration.ofSeconds(1))
                 .flatMap(Flux::last)
-                .switchIfEmpty(Mono.defer(() -> Mono.justOrEmpty(lastEmittedPoint)))
+                .onErrorContinue((throwable, o) -> System.out.println("Error: " + throwable.getMessage()))
                 .takeWhile(key -> isMonitoringStarted);
     }
 }
