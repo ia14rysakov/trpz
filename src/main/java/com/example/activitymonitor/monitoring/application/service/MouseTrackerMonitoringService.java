@@ -49,7 +49,7 @@ public class MouseTrackerMonitoringService implements Monitoring {
                 .cast(MonitoringPoint.class)
                 .window(Duration.ofSeconds(1))
                 .flatMap(Flux::last)
-                .onErrorContinue((throwable, o) -> System.out.println("Error: " + throwable.getMessage()))
+                .onErrorContinue((throwable, o) -> {})
                 .takeWhile(key -> isMonitoringStarted);
     }
 }
