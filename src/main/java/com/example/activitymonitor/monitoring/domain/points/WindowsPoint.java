@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class WindowsPoint {
     private String windowName;
     private String windowSize;
@@ -12,5 +11,10 @@ public class WindowsPoint {
     public WindowsPoint(String windowName, String windowSize) {
         this.windowName = windowName;
         this.windowSize = windowSize;
+    }
+
+    @Override
+    public String toString() {
+        return "WindowsPoint{" + "windowName=" + windowName + ", windowSize=" + windowSize + '}';
     }
 }

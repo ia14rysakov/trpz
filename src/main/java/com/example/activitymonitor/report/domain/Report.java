@@ -4,6 +4,7 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,11 +16,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Document(collection = "reports")
 public class Report {
-
-    @Id
-    private String id;
+    private String id = ObjectId.get().toHexString();
 
     protected String title;
     protected LocalDateTime timestamp;

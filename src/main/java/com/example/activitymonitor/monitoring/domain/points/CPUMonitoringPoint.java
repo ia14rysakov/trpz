@@ -10,12 +10,16 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 @Getter
-@ToString
 public class CPUMonitoringPoint implements MonitoringPoint {
     private double cpuUsage;
     private LocalDateTime timestamp = LocalDateTime.now();
 
     public CPUMonitoringPoint(double cpuUsage) {
         this.cpuUsage = cpuUsage;
+    }
+
+    @Override
+    public String toString() {
+        return "CPU :"+ cpuUsage +", timestamp=" + timestamp + '}' + "\n";
     }
 }

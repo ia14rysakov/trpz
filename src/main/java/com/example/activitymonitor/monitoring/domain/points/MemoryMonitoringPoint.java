@@ -17,4 +17,9 @@ public class MemoryMonitoringPoint implements MonitoringPoint {
         this.memoryUsage = memoryUsage;
     }
 
+    @Override
+    public String toString() {
+        return "Memory :"+ memoryUsage +", timestamp=" + timestamp + '}' + "\n";
+    }
+
 }

@@ -5,9 +5,10 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class TestPoint implements MonitoringPoint {
     private String test;
+
+    private String timestamp = java.time.LocalDateTime.now().toString();
 
     public TestPoint(String test) {
         this.test = test;
@@ -15,5 +16,10 @@ public class TestPoint implements MonitoringPoint {
 
     public String getTest() {
         return test;
+    }
+
+    @Override
+    public String toString() {
+        return "TestPoint{" + "test=" + test + ", timestamp=" + timestamp + '}' + "\n";
     }
 }
