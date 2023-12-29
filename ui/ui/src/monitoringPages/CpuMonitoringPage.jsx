@@ -39,7 +39,6 @@ const CpuMonitoringPage = () => {
             monitoringType: "cpuLoad",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
-            isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,
             scheduleEndTime: reportType === 'ScheduledReport' ? scheduleEndTime : undefined,
         };
@@ -139,16 +138,6 @@ const CpuMonitoringPage = () => {
                     fullWidth
                     margin="normal"
                 />
-            )}
-
-            {reportType === 'ReportStartStop' && (
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Is Report Going</InputLabel>
-                    <Select value={isReportGoing} label="Is Report Going" onChange={e => setIsReportGoing(e.target.value)}>
-                        <MenuItem value={true}>Yes</MenuItem>
-                        <MenuItem value={false}>No</MenuItem>
-                    </Select>
-                </FormControl>
             )}
 
             {reportType === 'ScheduledReport' && (
