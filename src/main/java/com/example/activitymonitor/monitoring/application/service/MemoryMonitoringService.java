@@ -6,14 +6,16 @@ import com.example.activitymonitor.monitoring.domain.points.MemoryMonitoringPoin
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
+import oshi.SystemInfo;
+import oshi.hardware.GlobalMemory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class MemoryMonitoringService implements Monitoring {
+
+    private final SystemInfo systemInfo = new SystemInfo();
 
     @Override
     public String getMonitoringName() {
@@ -21,7 +23,7 @@ public class MemoryMonitoringService implements Monitoring {
     }
 
     @Override
-    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto){
+    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
         return reportVisitor.visit(this, reportRequestDto);
     }
 
@@ -29,9 +31,8 @@ public class MemoryMonitoringService implements Monitoring {
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         return Flux.generate(sink -> {
             if (isMonitoringStarted) {
-                Runtime runtime = Runtime.getRuntime();
-                double memoryUsage = (double)
-                        ((runtime.totalMemory() - runtime.freeMemory()) / runtime.totalMemory()) * 100;
+                GlobalMemory memory = systemInfo.getHardware().getMemory();
+                double memoryUsage = (double) (memory.getTotal() - memory.getAvailable()) / memory.getTotal() * 100;
                 sink.next(new MemoryMonitoringPoint(memoryUsage));
             } else {
                 sink.complete();
