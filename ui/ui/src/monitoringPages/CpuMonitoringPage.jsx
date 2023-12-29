@@ -5,12 +5,21 @@ import 'chart.js/auto';
 import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 
 const CpuMonitoringPage = () => {
+    const getCurrentDateTime = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    };
+
     const [osType, setOsType] = useState('Windows');
     const [reportType, setReportType] = useState('ReportByTime');
-    const [dueToTime, setDueToTime] = useState('');
-    const [isReportGoing, setIsReportGoing] = useState(false);
-    const [scheduleStartTime, setScheduleStart] = useState('');
-    const [scheduleEndTime, setScheduleEnd] = useState('');
+    const [dueToTime, setDueToTime] = useState(getCurrentDateTime());
+    const [scheduleStartTime, setScheduleStart] = useState(getCurrentDateTime());
+    const [scheduleEndTime, setScheduleEnd] = useState(getCurrentDateTime());
     const location = useLocation();
 
     const [chartData, setChartData] = useState({
