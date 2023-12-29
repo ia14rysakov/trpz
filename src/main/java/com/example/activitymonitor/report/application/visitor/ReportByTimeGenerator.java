@@ -76,7 +76,6 @@ public class ReportByTimeGenerator implements ReportVisitor {
 
         Flux<MonitoringPoint> dataFlux = monitoringService.startMonitoring(true)
                 .publishOn(Schedulers.boundedElastic())
-                .doOnNext(it -> logger.info("duration " + Duration.between(startTime, LocalDateTime.now()).getSeconds()))
                 .takeWhile(it -> Duration.between(startTime, LocalDateTime.now()).compareTo(duration) <= 0).log();
 
 

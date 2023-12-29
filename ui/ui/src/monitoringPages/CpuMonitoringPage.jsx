@@ -9,8 +9,8 @@ const CpuMonitoringPage = () => {
     const [reportType, setReportType] = useState('ReportByTime');
     const [dueToTime, setDueToTime] = useState('');
     const [isReportGoing, setIsReportGoing] = useState(false);
-    const [scheduleStart, setScheduleStart] = useState('');
-    const [scheduleEnd, setScheduleEnd] = useState('');
+    const [scheduleStartTime, setScheduleStart] = useState('');
+    const [scheduleEndTime, setScheduleEnd] = useState('');
     const location = useLocation();
 
     const [chartData, setChartData] = useState({
@@ -31,8 +31,8 @@ const CpuMonitoringPage = () => {
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
-            scheduleStart: reportType === 'ScheduledReport' ? scheduleStart : undefined,
-            scheduleEnd: reportType === 'ScheduledReport' ? scheduleEnd : undefined,
+            scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,
+            scheduleEndTime: reportType === 'ScheduledReport' ? scheduleEndTime : undefined,
         };
 
         fetch('http://localhost:8080/report/download', {
@@ -147,15 +147,16 @@ const CpuMonitoringPage = () => {
                     <TextField
                         label="Start Time"
                         type="datetime-local"
-                        value={scheduleStart}
+                        value={scheduleStartTime}
                         onChange={e => setScheduleStart(e.target.value)}
                         fullWidth
                         margin="normal"
                     />
+
                     <TextField
                         label="End Time"
                         type="datetime-local"
-                        value={scheduleEnd}
+                        value={scheduleEndTime}
                         onChange={e => setScheduleEnd(e.target.value)}
                         fullWidth
                         margin="normal"

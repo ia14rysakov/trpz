@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class ReportController {
     public Mono<ResponseEntity<Resource>> downloadReport(@RequestBody ReportRequestDto reportRequestDto) {
         logger.info("Report request: " + reportRequestDto);
         return generateReport(reportRequestDto).log()
-                .timeout(Duration.between(LocalDateTime.now(),reportRequestDto.getDueToTime()).plus(Duration.ofSeconds(20)))
+                .publishOn(Schedulers.boundedElastic())
                 .flatMap(this::generatePdfFromReport)
                 .map(fileContent -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.pdf\"")
