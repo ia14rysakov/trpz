@@ -6,8 +6,6 @@ import org.jnativehook.keyboard.NativeKeyListener;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Getter

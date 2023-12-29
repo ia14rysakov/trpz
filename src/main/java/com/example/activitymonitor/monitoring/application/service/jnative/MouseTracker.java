@@ -30,5 +30,7 @@ public class MouseTracker implements NativeMouseMotionListener {
 
     }
 
+
+
     static Logger logger = Logger.getLogger(MouseTracker.class.getName());
 }

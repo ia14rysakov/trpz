@@ -17,8 +17,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 public class MouseTrackerMonitoringService implements Monitoring {
-    private FluxSink<String> cordsSink;
-    private Flux<String> keysFlux;
 
     @Override
     public String getMonitoringName() {
@@ -44,10 +42,16 @@ public class MouseTrackerMonitoringService implements Monitoring {
 
         GlobalScreen.addNativeMouseMotionListener(mouseTracker);
 
-        return mouseTracker.getCordsFlux()
-                .cast(MonitoringPoint.class)
-                .window(Duration.ofSeconds(1)) // Creates windows of 1 second
-                .flatMap(Flux::last) // Takes the last element from each window
+        Flux<MonitoringPoint> mouseMovementFlux = mouseTracker.getCordsFlux()
+                .cast(MonitoringPoint.class);
+
+        Flux<MonitoringPoint> heartbeatFlux = Flux.interval(Duration.ofSeconds(1))
+                .map(tick -> new MouseTrackerMonitoringPoint("0", "0"))
+                .cast(MonitoringPoint.class);
+
+        return Flux.merge(mouseMovementFlux, heartbeatFlux)
+                .window(Duration.ofSeconds(1))
+                .flatMap(Flux::last)
                 .takeWhile(key -> isMonitoringStarted);
     }
 }
