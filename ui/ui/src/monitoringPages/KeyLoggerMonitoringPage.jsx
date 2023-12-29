@@ -10,8 +10,7 @@ const KeyLoggerMonitoringPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
 
-        // Endpoint URL could be something like '/monitoring/keylogger'
-        const eventSource = new EventSource(`http://localhost:8080/monitoring/keylogger?osType=${osType}`);
+        const eventSource = new EventSource(`http://localhost:8080/monitoring/keylogger`);
 
         eventSource.onmessage = (event) => {
             const newKey = JSON.parse(event.data);
