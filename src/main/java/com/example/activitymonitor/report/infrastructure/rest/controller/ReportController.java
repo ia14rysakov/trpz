@@ -21,6 +21,8 @@ import reactor.core.publisher.Mono;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ public class ReportController {
     public Mono<ResponseEntity<Resource>> downloadReport(@RequestBody ReportRequestDto reportRequestDto) {
         logger.info("Report request: " + reportRequestDto);
         return generateReport(reportRequestDto).log()
+                .timeout(Duration.between(LocalDateTime.now(),reportRequestDto.getDueToTime()).plus(Duration.ofSeconds(20)))
                 .flatMap(this::generatePdfFromReport)
                 .map(fileContent -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.pdf\"")

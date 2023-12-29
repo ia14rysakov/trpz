@@ -72,10 +72,12 @@ public class ReportByTimeGenerator implements ReportVisitor {
 
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, dueToTime);
+        logger.info("Duration: " + duration.getSeconds());
 
         Flux<MonitoringPoint> dataFlux = monitoringService.startMonitoring(true)
                 .publishOn(Schedulers.boundedElastic())
-                .takeWhile(it -> Duration.between(startTime, LocalDateTime.now()).compareTo(duration) < 0).log();
+                .doOnNext(it -> logger.info("duration " + Duration.between(startTime, LocalDateTime.now()).getSeconds()))
+                .takeWhile(it -> Duration.between(startTime, LocalDateTime.now()).compareTo(duration) <= 0).log();
 
 
         return dataFlux.collectList().map(dataList -> new Report(

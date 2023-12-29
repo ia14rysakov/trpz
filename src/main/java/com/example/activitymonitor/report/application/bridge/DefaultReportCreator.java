@@ -1,9 +1,6 @@
 package com.example.activitymonitor.report.application.bridge;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
-import com.example.activitymonitor.report.application.visitor.ReportByTimeGenerator;
-import com.example.activitymonitor.report.application.visitor.ReportStartStopGenerator;
-import com.example.activitymonitor.report.application.visitor.ScheduledReportGenerator;
 import com.example.activitymonitor.report.domain.Report;
 
 import java.time.LocalDateTime;

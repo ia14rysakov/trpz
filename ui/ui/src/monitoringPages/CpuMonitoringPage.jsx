@@ -5,7 +5,6 @@ import 'chart.js/auto';
 import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 
 const CpuMonitoringPage = () => {
-    const [testData, setTestData] = useState([]);
     const [osType, setOsType] = useState('Windows');
     const [reportType, setReportType] = useState('ReportByTime');
     const [dueToTime, setDueToTime] = useState('');
@@ -99,7 +98,7 @@ const CpuMonitoringPage = () => {
     return (
     <Box sx={{ padding: '20px' }}>
         <Typography variant="h4" gutterBottom>
-            Test Monitoring
+            Cpu Monitoring
         </Typography>
 
         {/* Report Generation Form */}
