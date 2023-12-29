@@ -47,13 +47,9 @@ public class WindowsMonitoringService implements Monitoring {
                     User32.INSTANCE.GetWindowRect(hWnd, rect);
                     String windowSize = rect.right + "x" + rect.bottom;
 
-                    OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-                    double cpuUsage = osBean.getSystemLoadAverage();
-
-                    Runtime runtime = Runtime.getRuntime();
-                    double memoryUsage = (double) (runtime.totalMemory() - runtime.freeMemory()) / runtime.totalMemory();
-
-                    windowsMonitoringPoints.add(new WindowsPoint(wText, windowSize, cpuUsage, memoryUsage));
+                    if (!wText.isBlank()) {
+                        windowsMonitoringPoints.add(new WindowsPoint(wText, windowSize));
+                    }
                     return true;
                 }, null);
                 sink.next(new WindowsMonitoringPoint(windowsMonitoringPoints));
