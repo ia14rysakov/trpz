@@ -13,11 +13,14 @@ import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 @Getter
 @Setter
 @Component
 public class ReportByTimeGenerator implements ReportVisitor {
+
+    private Logger logger = Logger.getLogger(ReportByTimeGenerator.class.getName());
 
     private LocalDateTime dueToTime = LocalDateTime.now().plusSeconds(20);
 
@@ -62,6 +65,11 @@ public class ReportByTimeGenerator implements ReportVisitor {
         if (dueToTime == null) {
             throw new IllegalStateException("dueToTime must be set before generating a report");
         }
+        else if (dueToTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("dueToTime must be in the future");
+        }
+
+        logger.info("Generating report for " + serviceName + " from " + LocalDateTime.now() + " to " + dueToTime);
 
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, dueToTime);
@@ -76,12 +84,5 @@ public class ReportByTimeGenerator implements ReportVisitor {
                 duration,
                 getReportName(),
                 dataList));
-
-//        return dataFlux.collectList().map(data -> {
-//            String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
-//            Report report = new Report(title, duration, getReportName());
-//            report.setData(data);
-//            return report;
-//        });
     }
 }
