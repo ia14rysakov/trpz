@@ -6,7 +6,7 @@ import com.example.activitymonitor.report.domain.ReportType;
 import java.time.Duration;
 
 public class KeyLoggerReport extends Report {
-    public KeyLoggerReport(String title, Duration duration, ReportType reportType) {
+    public KeyLoggerReport(String title, Duration duration, String reportType) {
         super(title, duration, reportType);
     }
 }

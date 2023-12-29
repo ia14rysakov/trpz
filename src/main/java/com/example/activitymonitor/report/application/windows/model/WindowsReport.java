@@ -7,7 +7,8 @@ import java.time.Duration;
 
 public class WindowsReport extends Report {
 
-    public WindowsReport(String title, Duration duration, ReportType reportType) {
+    public WindowsReport(String title, Duration duration, String reportType) {
         super(title, duration, reportType);
     }
 }
+

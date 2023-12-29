@@ -7,7 +7,7 @@ import java.time.Duration;
 
 public class MouseTrackerReport extends Report {
 
-    public MouseTrackerReport(String title, Duration duration, ReportType reportType) {
+    public MouseTrackerReport(String title, Duration duration, String reportType) {
         super(title, duration, reportType);
     }
 }

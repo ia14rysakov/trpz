@@ -38,5 +38,10 @@ public class WindowsMonitor extends AbstractMonitor {
     public Monitoring setWindowsMonitor() {
         return new WindowsMonitoringService();
     }
+
+    @Override
+    public Monitoring setTestMonitor() {
+        return new TestMonitoring();
+    }
 }
 
