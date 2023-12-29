@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Typography, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 const WindowsMonitoringPage = () => {
-    const [windowsData, setWindowsData] = useState([]);
+    const [latestWindowsData, setLatestWindowsData] = useState([]);
     const location = useLocation();
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const WindowsMonitoringPage = () => {
 
         eventSource.onmessage = (event) => {
             const newWindowsPoint = JSON.parse(event.data);
-            setWindowsData(newWindowsPoint.windowsPoints);
+            setLatestWindowsData(newWindowsPoint.windowsPoints);
         };
 
         eventSource.onerror = (error) => {
@@ -39,22 +39,15 @@ const WindowsMonitoringPage = () => {
                         <TableRow>
                             <TableCell>Window Name</TableCell>
                             <TableCell align="right">Window Size</TableCell>
-                            <TableCell align="right">CPU Usage (%)</TableCell>
-                            <TableCell align="right">Memory Usage (%)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {windowsData.map((window, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
+                        {latestWindowsData.map((window, index) => (
+                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell component="th" scope="row">
                                     {window.windowName}
                                 </TableCell>
                                 <TableCell align="right">{window.windowSize}</TableCell>
-                                <TableCell align="right">{window.cpuUsage.toFixed(2)}</TableCell>
-                                <TableCell align="right">{window.memoryUsage.toFixed(2)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
