@@ -25,11 +25,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/report")
 public class ReportController {
+
+    private Logger logger = Logger.getLogger(ReportController.class.getName());
 
     private Map<String, ReportVisitor> reportVisitorMap;
 
@@ -48,7 +51,8 @@ public class ReportController {
 
     @PostMapping("/download")
     public Mono<ResponseEntity<Resource>> downloadReport(@RequestBody ReportRequestDto reportRequestDto) {
-        return generateReport(reportRequestDto)
+        logger.info("Report request: " + reportRequestDto);
+        return generateReport(reportRequestDto).log()
                 .flatMap(this::generatePdfFromReport)
                 .map(fileContent -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.pdf\"")
@@ -72,6 +76,7 @@ public class ReportController {
             document.add(new Paragraph("Report Title: " + report.getTitle()));
             document.add(new Paragraph("Timestamp: " + report.getTimestamp().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
             document.add(new Paragraph("Duration: " + report.getDuration()));
+            document.add(new Paragraph("Data: " + report.getData()));
             document.add(new Paragraph("Summary: " + report.getSummary()));
 
 

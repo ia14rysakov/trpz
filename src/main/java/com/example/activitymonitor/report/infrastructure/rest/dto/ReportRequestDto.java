@@ -2,9 +2,11 @@ package com.example.activitymonitor.report.infrastructure.rest.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class ReportRequestDto {
     private String reportType;
     private String monitoringType;

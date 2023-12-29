@@ -46,6 +46,7 @@ public abstract class AbstractMonitor {
             case "memory" -> setMemoryMonitor();
             case "mouseTracker" -> setMouseTrackerMonitor();
             case "windows" -> setWindowsMonitor();
+            case "test" -> setTestMonitor();
             default -> throw new IllegalArgumentException("Invalid monitoring type: " + report.getMonitoringType());
         };
     }

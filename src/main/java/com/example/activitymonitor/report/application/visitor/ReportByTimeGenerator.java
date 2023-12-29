@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @Component
 public class ReportByTimeGenerator implements ReportVisitor {
 
-    private LocalDateTime dueToTime = LocalDateTime.now().plusMinutes(1);
+    private LocalDateTime dueToTime = LocalDateTime.now().plusSeconds(20);
 
     @Override
     public String getReportName() {
@@ -52,6 +53,11 @@ public class ReportByTimeGenerator implements ReportVisitor {
         return commonVisitor(windowsMonitoringService, "Windows Monitoring");
     }
 
+    @Override
+    public Mono<Report> visit(TestMonitoring testMonitoring) {
+        return commonVisitor(testMonitoring, "Test Monitoring");
+    }
+
     private Mono<Report> commonVisitor(Monitoring monitoringService, String serviceName) {
         if (dueToTime == null) {
             throw new IllegalStateException("dueToTime must be set before generating a report");
@@ -61,13 +67,21 @@ public class ReportByTimeGenerator implements ReportVisitor {
         Duration duration = Duration.between(startTime, dueToTime);
 
         Flux<MonitoringPoint> dataFlux = monitoringService.startMonitoring(true)
-                .takeWhile(point -> LocalDateTime.now().isBefore(dueToTime));
+                .publishOn(Schedulers.boundedElastic())
+                .takeWhile(it -> Duration.between(startTime, LocalDateTime.now()).compareTo(duration) < 0).log();
 
-        return dataFlux.collectList().map(data -> {
-            String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
-            Report report = new Report(title, duration, getReportName());
-            report.setData(data);
-            return report;
-        });
+
+        return dataFlux.collectList().map(dataList -> new Report(
+                serviceName + " Report - from " + startTime + " to " + dueToTime,
+                duration,
+                getReportName(),
+                dataList));
+
+//        return dataFlux.collectList().map(data -> {
+//            String title = serviceName + " Report - from " + startTime + " to " + dueToTime;
+//            Report report = new Report(title, duration, getReportName());
+//            report.setData(data);
+//            return report;
+//        });
     }
 }

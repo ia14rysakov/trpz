@@ -16,4 +16,6 @@ public interface ReportVisitor {
     Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService);
 
     Mono<Report> visit(WindowsMonitoringService windowsMonitoringService);
+
+    Mono<Report> visit(TestMonitoring testMonitoring);
 }

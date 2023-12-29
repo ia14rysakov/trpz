@@ -48,6 +48,11 @@ public class ReportStartStopGenerator implements ReportVisitor {
         return defaultVisiting(windowsMonitoringService, "Windows Monitoring");
     }
 
+    @Override
+    public Mono<Report> visit(TestMonitoring testMonitoring) {
+        return defaultVisiting(testMonitoring, "Test Monitoring");
+    }
+
     private Mono<Report> defaultVisiting(Monitoring monitoring, String serviceName) {
         LocalDateTime startTime = LocalDateTime.now();
 

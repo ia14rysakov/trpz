@@ -3,6 +3,7 @@ package com.example.activitymonitor.report.domain;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @Document(collection = "reports")
 public class Report {
 
@@ -27,6 +29,13 @@ public class Report {
     protected String summary;
     protected String reportType;
 
+    public Report(String title, Duration duration, String reportType, List<MonitoringPoint> data) {
+        this.title = title;
+        this.timestamp = LocalDateTime.now();
+        this.duration = duration;
+        this.data = data;
+        this.reportType = reportType;
+    }
     public Report(String title, Duration duration, String reportType) {
         this.title = title;
         this.timestamp = LocalDateTime.now();

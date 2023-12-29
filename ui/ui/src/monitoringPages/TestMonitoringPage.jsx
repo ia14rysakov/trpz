@@ -4,7 +4,7 @@ import { Typography, Box, Select, MenuItem, FormControl, InputLabel, TextField, 
 
 const TestMonitoringPage = () => {
     const [testData, setTestData] = useState([]);
-    const [osType, setOsType] = useState('linux');
+    const [osType, setOsType] = useState('Windows');
     const [reportType, setReportType] = useState('ReportByTime');
     const [dueToTime, setDueToTime] = useState('');
     const [isReportGoing, setIsReportGoing] = useState(false);
@@ -32,12 +32,40 @@ const TestMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
+            monitoringType: "test",
             osType,
-            // Add other parameters based on reportType
+            dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
+            isReportGoing: reportType === 'ReportStartStop' ? isReportGoing : undefined,
+            scheduleStart: reportType === 'ScheduledReport' ? scheduleStart : undefined,
+            scheduleEnd: reportType === 'ScheduledReport' ? scheduleEnd : undefined,
         };
 
-        // Logic to send request to backend
-        console.log('Report Request:', reportRequestDto);
+        fetch('http://localhost:8080/report/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reportRequestDto),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     };
 
     return (
@@ -51,8 +79,8 @@ const TestMonitoringPage = () => {
                 <FormControl fullWidth margin="normal">
                     <InputLabel>OS Type</InputLabel>
                     <Select value={osType} label="OS Type" onChange={e => setOsType(e.target.value)}>
+                        <MenuItem value="Windows">Windows</MenuItem>
                         <MenuItem value="linux">Linux</MenuItem>
-                        <MenuItem value="windows">Windows</MenuItem>
                         <MenuItem value="macOs">macOS</MenuItem>
                     </Select>
                 </FormControl>

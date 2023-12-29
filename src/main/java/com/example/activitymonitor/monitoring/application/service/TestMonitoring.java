@@ -20,14 +20,14 @@ public class TestMonitoring implements Monitoring {
 
     @Override
     public Mono<Report> accept(ReportVisitor reportVisitor) {
-        return null;
+        return reportVisitor.visit(this);
     }
 
     @Override
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {
         return Flux.generate(sink -> {
             if (isMonitoringStarted) {
-                sink.next(new TestPoint("test"));
+                sink.next(new TestPoint("test" + System.currentTimeMillis()/1000 ));
             } else {
                 sink.complete();
             }
