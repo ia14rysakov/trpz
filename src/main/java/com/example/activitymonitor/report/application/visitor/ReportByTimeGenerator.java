@@ -4,6 +4,7 @@ import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.service.*;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.report.domain.Report;
+import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -22,46 +23,44 @@ public class ReportByTimeGenerator implements ReportVisitor {
 
     private Logger logger = Logger.getLogger(ReportByTimeGenerator.class.getName());
 
-    private LocalDateTime dueToTime = LocalDateTime.now().plusSeconds(20);
-
     @Override
     public String getReportName() {
         return "ReportByTime";
     }
 
     @Override
-    public Mono<Report> visit(CpuLoadMonitoringService cpuLoadMonitoringService) {
-        return commonVisitor(cpuLoadMonitoringService, "CPU Load Monitoring");
+    public Mono<Report> visit(CpuLoadMonitoringService cpuLoadMonitoringService, ReportRequestDto reportRequestDto) {
+        return commonVisitor(cpuLoadMonitoringService, "CPU Load Monitoring", reportRequestDto.getDueToTime());
     }
 
     @Override
-    public Mono<Report> visit(KeyLoggerMonitoringService keyLoggerMonitoringService) {
-        return commonVisitor(keyLoggerMonitoringService, "Key Logger Monitoring");
+    public Mono<Report> visit(KeyLoggerMonitoringService keyLoggerMonitoringService, ReportRequestDto reportRequestDto) {
+        return commonVisitor(keyLoggerMonitoringService, "Key Logger Monitoring", reportRequestDto.getDueToTime());
     }
 
     @Override
-    public Mono<Report> visit(MemoryMonitoringService memoryMonitoringService) {
-        return commonVisitor(memoryMonitoringService, "Memory Monitoring");
+    public Mono<Report> visit(MemoryMonitoringService memoryMonitoringService, ReportRequestDto reportRequestDto) {
+        return commonVisitor(memoryMonitoringService, "Memory Monitoring", reportRequestDto.getDueToTime());
     }
 
     @Override
-    public Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService) {
+    public Mono<Report> visit(MouseTrackerMonitoringService mouseTrackerMonitoringService, ReportRequestDto reportRequestDto) {
 
-        return commonVisitor(mouseTrackerMonitoringService, "Mouse Tracker Monitoring");
+        return commonVisitor(mouseTrackerMonitoringService, "Mouse Tracker Monitoring", reportRequestDto.getDueToTime());
     }
 
     @Override
-    public Mono<Report> visit(WindowsMonitoringService windowsMonitoringService) {
+    public Mono<Report> visit(WindowsMonitoringService windowsMonitoringService, ReportRequestDto reportRequestDto) {
 
-        return commonVisitor(windowsMonitoringService, "Windows Monitoring");
+        return commonVisitor(windowsMonitoringService, "Windows Monitoring", reportRequestDto.getDueToTime());
     }
 
     @Override
-    public Mono<Report> visit(TestMonitoring testMonitoring) {
-        return commonVisitor(testMonitoring, "Test Monitoring");
+    public Mono<Report> visit(TestMonitoring testMonitoring, ReportRequestDto reportRequestDto) {
+        return commonVisitor(testMonitoring, "Test Monitoring", reportRequestDto.getDueToTime());
     }
 
-    private Mono<Report> commonVisitor(Monitoring monitoringService, String serviceName) {
+    private Mono<Report> commonVisitor(Monitoring monitoringService, String serviceName, LocalDateTime dueToTime) {
         if (dueToTime == null) {
             throw new IllegalStateException("dueToTime must be set before generating a report");
         }

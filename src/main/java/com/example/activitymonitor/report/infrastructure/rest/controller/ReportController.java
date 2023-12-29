@@ -63,7 +63,7 @@ public class ReportController {
     private Mono<Report> generateReport(ReportRequestDto reportRequestDto) {
         AbstractMonitor currentMonitor = monitorMap.get(reportRequestDto.getOsType());
         ReportVisitor reportVisitor = reportVisitorMap.get(reportRequestDto.getReportType());
-        return currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor);
+        return currentMonitor.getConcreteMonitoring(reportRequestDto).accept(reportVisitor, reportRequestDto);
     }
 
     private Mono<byte[]> generatePdfFromReport(Report report) {

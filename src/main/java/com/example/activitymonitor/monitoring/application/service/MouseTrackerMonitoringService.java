@@ -8,6 +8,7 @@ import com.example.activitymonitor.monitoring.domain.points.KeyLoggerMonitoringP
 import com.example.activitymonitor.monitoring.domain.points.MouseTrackerMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
+import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
@@ -18,8 +19,6 @@ import java.time.Duration;
 
 public class MouseTrackerMonitoringService implements Monitoring {
 
-    private volatile MouseTrackerMonitoringPoint lastEmittedPoint = null;
-
 
     @Override
     public String getMonitoringName() {
@@ -27,8 +26,8 @@ public class MouseTrackerMonitoringService implements Monitoring {
     }
 
     @Override
-    public Mono<Report> accept(ReportVisitor reportVisitor) {
-        return reportVisitor.visit(this);
+    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
+        return reportVisitor.visit(this, reportRequestDto);
     }
 
     @Override

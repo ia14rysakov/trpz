@@ -5,6 +5,7 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.domain.points.MemoryMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
+import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -20,8 +21,8 @@ public class MemoryMonitoringService implements Monitoring {
     }
 
     @Override
-    public Mono<Report> accept(ReportVisitor reportVisitor) {
-        return reportVisitor.visit(this);
+    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto){
+        return reportVisitor.visit(this, reportRequestDto);
     }
 
     @Override

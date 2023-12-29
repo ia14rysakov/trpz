@@ -122,7 +122,6 @@ const CpuMonitoringPage = () => {
                 </Select>
             </FormControl>
 
-            {/* Conditional Inputs */}
             {reportType === 'ReportByTime' && (
                 <TextField
                     label="Due To Time"

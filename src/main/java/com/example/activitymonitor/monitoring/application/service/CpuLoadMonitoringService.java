@@ -5,6 +5,7 @@ import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
 import com.example.activitymonitor.monitoring.domain.points.CPUMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
+import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import reactor.core.publisher.Flux;
@@ -23,8 +24,8 @@ public class CpuLoadMonitoringService implements Monitoring {
     }
 
     @Override
-    public Mono<Report> accept(ReportVisitor reportVisitor) {
-        return reportVisitor.visit(this);
+    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
+        return reportVisitor.visit(this, reportRequestDto);
     }
 
 

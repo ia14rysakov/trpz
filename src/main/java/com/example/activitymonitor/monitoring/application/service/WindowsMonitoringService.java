@@ -7,6 +7,7 @@ import com.example.activitymonitor.monitoring.domain.points.WindowsMonitoringPoi
 import com.example.activitymonitor.monitoring.domain.points.WindowsPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
+import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
@@ -29,8 +30,8 @@ public class WindowsMonitoringService implements Monitoring {
     }
 
     @Override
-    public Mono<Report> accept(ReportVisitor reportVisitor) {
-        return reportVisitor.visit(this);
+    public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
+        return reportVisitor.visit(this, reportRequestDto);
     }
 
     @Override
