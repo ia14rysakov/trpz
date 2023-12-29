@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/monitoring")
 @Slf4j
 public class MonitoringController {
-    private Logger logger = Logger.getLogger(MonitoringController.class.getName());
+    private final Logger logger = Logger.getLogger(MonitoringController.class.getName());
+
+    private String osType = "Windows";
 
     private final Map<String, AbstractMonitor> monitorMap;
 
@@ -30,28 +32,57 @@ public class MonitoringController {
 
     @GetMapping("/cpuLoad")
     public Flux<MonitoringPoint> startCpuMonitoring() {
-        logger.info("Monitoring request: cpuLoad on " + "Windows");
+        logger.info("Starting cpu load monitoring");
 
+       MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("cpuLoad", "Windows");
 
-        AbstractMonitor abstractMonitor = monitorMap.get("Windows");
-
-        return abstractMonitor.startMonitoring("cpuLoad");
+        return getMonitoringPoints(monitoringRequestDto);
     }
 
-    @PostMapping("/start")
-    public Flux<MonitoringPoint> startMonitoring(@RequestBody MonitoringRequestDto monitoringRequestDto) {
-        logger.info("Monitoring request: " + monitoringRequestDto.toString());
-        String monitoringType = monitoringRequestDto.getMonitoringType();
-        String osType = monitoringRequestDto.getOsType();
+    @GetMapping("/memory")
+    public Flux<MonitoringPoint> startMemoryMonitoring() {
+        logger.info("Monitoring request: cpuLoad on " + osType);
 
-        AbstractMonitor abstractMonitor = monitorMap.get(osType);
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("memory", "Windows");
 
-        return abstractMonitor.startMonitoring(monitoringType);
+        return getMonitoringPoints(monitoringRequestDto);
+    }
+
+    @GetMapping("/keyLogger")
+    public Flux<MonitoringPoint> startKeyLogger() {
+        logger.info("Monitoring request: cpuLoad on " + osType);
+
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("keyLogger", "Windows");
+
+        return getMonitoringPoints(monitoringRequestDto);
+    }
+
+    @GetMapping("/windows")
+    public Flux<MonitoringPoint> startWindowsMonitoring() {
+        logger.info("Monitoring request: cpuLoad on " + osType);
+
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("windows", "Windows");
+
+        return getMonitoringPoints(monitoringRequestDto);
+    }
+
+    @GetMapping("/mouseTracker")
+    public Flux<MonitoringPoint> startMouseTracker() {
+        logger.info("Monitoring request: cpuLoad on " + osType);
+
+        MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("mouseTracker", "Windows");
+
+        return getMonitoringPoints(monitoringRequestDto);
     }
 
     @GetMapping("/test")
     public Flux<MonitoringPoint> test() {
         MonitoringRequestDto monitoringRequestDto = new MonitoringRequestDto("test", "Windows");
+
+        return getMonitoringPoints(monitoringRequestDto);
+    }
+
+    private Flux<MonitoringPoint> getMonitoringPoints(MonitoringRequestDto monitoringRequestDto) {
         String monitoringType = monitoringRequestDto.getMonitoringType();
         String osType = monitoringRequestDto.getOsType();
 
