@@ -44,7 +44,8 @@ public class MouseTrackerMonitoringService implements Monitoring {
                 .cast(MonitoringPoint.class)
                 .window(Duration.ofSeconds(1))
                 .flatMap(Flux::last)
-                .onErrorContinue((throwable, o) -> {})
+                .onErrorContinue((throwable, o) -> {
+                })
                 .takeWhile(key -> isMonitoringStarted);
     }
 }

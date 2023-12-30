@@ -86,3 +86,4 @@ public class ReportByTimeGenerator implements ReportVisitor {
                 dataList));
     }
 }
+

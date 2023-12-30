@@ -20,3 +20,4 @@ public interface ReportVisitor {
 
     Mono<Report> visit(TestMonitoring testMonitoring, ReportRequestDto reportRequestDto);
 }
+

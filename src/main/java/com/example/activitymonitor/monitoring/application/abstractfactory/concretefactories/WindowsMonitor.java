@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
+
 public class WindowsMonitor extends AbstractMonitor {
 
     private String osType = "Windows";
