@@ -25,7 +25,7 @@ const KeyLoggerMonitoringPage = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
-        const monitoringType = queryParams.get('monitoringType');
+        const monitoringType = "KEYBOARD_ACTIVITY";
 
         const eventSource = new EventSource(`http://localhost:8080/monitoring/${monitoringType}/${osType}`);
 

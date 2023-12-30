@@ -75,7 +75,7 @@ const CpuMonitoringPage = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const osType = queryParams.get('osType');
-        const monitoringType = queryParams.get('monitoringType');
+        const monitoringType = "CPU_LOAD";
 
         const eventSource = new EventSource(`http://localhost:8080/monitoring/${monitoringType}/${osType}`);
         eventSource.onmessage = (event) => {
