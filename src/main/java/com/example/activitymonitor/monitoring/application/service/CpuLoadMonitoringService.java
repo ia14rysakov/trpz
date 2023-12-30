@@ -2,6 +2,7 @@ package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.monitoring.domain.points.CPUMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
@@ -20,7 +21,7 @@ public class CpuLoadMonitoringService implements Monitoring {
 
     @Override
     public String getMonitoringName() {
-        return "CPUMonitoring";
+        return MonitoringType.CPU_USAGE.name();
     }
 
     @Override
@@ -43,4 +44,3 @@ public class CpuLoadMonitoringService implements Monitoring {
         }).delayElements(Duration.ofSeconds(1)).cast(MonitoringPoint.class);
     }
 }
-

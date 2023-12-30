@@ -2,6 +2,7 @@ package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.monitoring.domain.points.TestPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 public class TestMonitoring implements Monitoring {
     @Override
     public String getMonitoringName() {
-        return "test";
+        return MonitoringType.TEST.name();
     }
 
     @Override
