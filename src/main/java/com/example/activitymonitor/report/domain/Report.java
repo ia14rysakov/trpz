@@ -24,7 +24,7 @@ public class Report {
     protected Duration duration;
 
     protected List<MonitoringPoint> data;
-    protected String summary;
+
     protected String reportType;
 
     public Report(String title, Duration duration, String reportType, List<MonitoringPoint> data) {
