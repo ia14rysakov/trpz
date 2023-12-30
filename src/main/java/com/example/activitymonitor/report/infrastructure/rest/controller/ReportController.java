@@ -87,8 +87,6 @@ public class ReportController {
             document.add(new Paragraph("Timestamp: " + report.getTimestamp().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
             document.add(new Paragraph("Duration: " + report.getDuration()));
             document.add(new Paragraph("Data: " + report.getData()));
-            document.add(new Paragraph("Summary: " + report.getSummary()));
-
 
             document.close();
             return Mono.just(outputStream.toByteArray());
