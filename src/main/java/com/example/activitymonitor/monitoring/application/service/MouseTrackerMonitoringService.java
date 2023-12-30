@@ -1,28 +1,24 @@
 package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
-import com.example.activitymonitor.monitoring.application.service.jnative.KeyListener;
 import com.example.activitymonitor.monitoring.application.service.jnative.MouseTracker;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
-import com.example.activitymonitor.monitoring.domain.points.KeyLoggerMonitoringPoint;
-import com.example.activitymonitor.monitoring.domain.points.MouseTrackerMonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
 public class MouseTrackerMonitoringService implements Monitoring {
 
-
     @Override
     public String getMonitoringName() {
-        return "MouseTracker";
+        return MonitoringType.MOUSE_ACTIVITY.name();
     }
 
     @Override

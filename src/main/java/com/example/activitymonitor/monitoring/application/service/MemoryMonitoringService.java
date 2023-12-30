@@ -2,6 +2,7 @@ package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.monitoring.domain.points.MemoryMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
@@ -19,7 +20,7 @@ public class MemoryMonitoringService implements Monitoring {
 
     @Override
     public String getMonitoringName() {
-        return "MemoryMonitoring";
+        return MonitoringType.MEMORY_USAGE.name();
     }
 
     @Override

@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 public class MonitoringController {
     private final Logger logger = Logger.getLogger(MonitoringController.class.getName());
 
-    private String osType = "Windows";
-
     private final Map<String, AbstractMonitor> monitorMap;
 
     public MonitoringController(@Autowired List<AbstractMonitor> monitorList) {

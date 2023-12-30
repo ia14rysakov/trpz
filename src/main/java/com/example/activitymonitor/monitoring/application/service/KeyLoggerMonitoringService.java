@@ -3,6 +3,7 @@ package com.example.activitymonitor.monitoring.application.service;
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.application.service.jnative.KeyListener;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.monitoring.domain.points.KeyLoggerMonitoringPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
@@ -16,14 +17,13 @@ public class KeyLoggerMonitoringService implements Monitoring {
 
     @Override
     public String getMonitoringName() {
-        return "KeyLoggerMonitoring";
+        return MonitoringType.KEYBOARD_ACTIVITY.name();
     }
 
     @Override
     public Mono<Report> accept(ReportVisitor reportVisitor, ReportRequestDto reportRequestDto) {
         return reportVisitor.visit(this, reportRequestDto);
     }
-
 
     @Override
     public Flux<MonitoringPoint> startMonitoring(boolean isMonitoringStarted) {

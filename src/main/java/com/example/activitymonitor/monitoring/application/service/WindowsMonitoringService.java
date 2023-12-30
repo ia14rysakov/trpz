@@ -3,6 +3,7 @@ package com.example.activitymonitor.monitoring.application.service;
 
 import com.example.activitymonitor.monitoring.application.Monitoring;
 import com.example.activitymonitor.monitoring.domain.MonitoringPoint;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.monitoring.domain.points.WindowsMonitoringPoint;
 import com.example.activitymonitor.monitoring.domain.points.WindowsPoint;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
@@ -14,19 +15,15 @@ import com.sun.jna.platform.win32.WinDef;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class WindowsMonitoringService implements Monitoring {
 
     @Override
     public String getMonitoringName() {
-        return "WindowsMonitoring";
+        return MonitoringType.WINDOWS.name();
     }
 
     @Override
@@ -60,4 +57,3 @@ public class WindowsMonitoringService implements Monitoring {
         }).delayElements(Duration.ofSeconds(1)).cast(MonitoringPoint.class);
     }
 }
-
