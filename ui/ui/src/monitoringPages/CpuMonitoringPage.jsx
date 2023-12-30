@@ -36,7 +36,7 @@ const CpuMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "cpuLoad",
+            monitoringType: "CPU_LOAD",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,

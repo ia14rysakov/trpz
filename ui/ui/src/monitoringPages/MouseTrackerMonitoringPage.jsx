@@ -46,7 +46,7 @@ const MouseTrackerMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "mouseTracker",
+            monitoringType: "MOUSE_ACTIVITY",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,

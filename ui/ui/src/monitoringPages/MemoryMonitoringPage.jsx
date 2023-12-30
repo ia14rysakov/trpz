@@ -66,7 +66,7 @@ const MemoryMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "memory",
+            monitoringType: "MEMORY_USAGE",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,

@@ -43,7 +43,7 @@ const TestMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "test",
+            monitoringType: "TEST",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,

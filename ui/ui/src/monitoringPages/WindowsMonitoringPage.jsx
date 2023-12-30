@@ -50,7 +50,7 @@ const WindowsMonitoringPage = () => {
     const handleReportRequest = () => {
         const reportRequestDto = {
             reportType,
-            monitoringType: "windows",
+            monitoringType: "WINDOWS",
             osType,
             dueToTime: reportType === 'ReportByTime' ? dueToTime : undefined,
             scheduleStartTime: reportType === 'ScheduledReport' ? scheduleStartTime : undefined,
