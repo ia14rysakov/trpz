@@ -1,6 +1,7 @@
 package com.example.activitymonitor.report.infrastructure.rest.controller;
 
 import com.example.activitymonitor.monitoring.application.abstractfactory.AbstractMonitor;
+import com.example.activitymonitor.monitoring.domain.MonitoringType;
 import com.example.activitymonitor.report.application.visitor.ReportVisitor;
 import com.example.activitymonitor.report.domain.Report;
 import com.example.activitymonitor.report.infrastructure.rest.dto.ReportRequestDto;
@@ -53,6 +54,13 @@ public class ReportController {
     @PostMapping("/download")
     public Mono<ResponseEntity<Resource>> downloadReport(@RequestBody ReportRequestDto reportRequestDto) {
         logger.info("Report request: " + reportRequestDto);
+
+        try {
+            MonitoringType.valueOf(reportRequestDto.getMonitoringType());
+        } catch (IllegalArgumentException e) {
+            return Mono.error(e);
+        }
+
         return generateReport(reportRequestDto).log()
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(this::generatePdfFromReport)

@@ -39,14 +39,13 @@ public abstract class AbstractMonitor {
     }
 
     public Monitoring getConcreteMonitoring(ReportRequestDto report) {
-        return switch (report.getMonitoringType()) {
-            case "cpuLoad" -> setCpuLoadMonitor();
-            case "keyLogger" -> setKeyLoggerMonitor();
-            case "memory" -> setMemoryMonitor();
-            case "mouseTracker" -> setMouseTrackerMonitor();
-            case "windows" -> setWindowsMonitor();
-            case "test" -> setTestMonitor();
-            default -> throw new IllegalArgumentException("Invalid monitoring type: " + report.getMonitoringType());
+        return switch (MonitoringType.valueOf(report.getMonitoringType())) {
+            case CPU_USAGE -> setCpuLoadMonitor();
+            case KEYBOARD_ACTIVITY -> setKeyLoggerMonitor();
+            case MEMORY_USAGE -> setMemoryMonitor();
+            case MOUSE_ACTIVITY -> setMouseTrackerMonitor();
+            case WINDOWS -> setWindowsMonitor();
+            case TEST -> setTestMonitor();
         };
     }
 }
